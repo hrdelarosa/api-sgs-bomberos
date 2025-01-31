@@ -1,0 +1,14 @@
+### Crear un nuevo rol 
+POST http://localhost:1234/api/roles/crear
+Content-Type: application/json
+
+{
+  "nombre": "usuario",
+  "descripcion": "Rol para usuarios normales con acceso limitado."
+}
+
+### Eliminar un rol guardado
+DELETE http://localhost:1234/api/roles/eliminar/bb38f6a3-c72c-11ef-a95a-24842a45da79
+
+### Recuperar todos los roles guardados
+GET http://localhost:1234/api/roles

@@ -1,0 +1,31 @@
+### Crear un nuevo personal 
+POST http://localhost:1234/api/personal/crear
+Content-Type: application/json
+
+{
+  "nombres": "Roberto",
+  "apellidos": "De la Rosa",
+  "np": "191102",
+  "rango": "ea7c89ed-cd47-11ef-8762-48b2a523c160",
+  "base": "supernumerario",
+  "guardia": "859ea494-cd47-11ef-8762-48b2a523c160"
+}
+
+### Eliminar un personal guardado
+DELETE http://localhost:1234/api/personal/eliminar/7290227a-d184-11ef-83bf-772d7de91ccd
+
+### Recuperar todo el personal guardado
+GET http://localhost:1234/api/personal
+
+### Recuperar todo el personal de una guardia en concreto
+GET http://localhost:1234/api/personal/859ea494-cd47-11ef-8762-48b2a523c160
+
+### Actualizar la guardia del personal 
+PATCH http://localhost:1234/api/personal/actualizar/guardia/null
+Content-Type: application/json
+
+{
+  "personal": [
+    "e9fb0dd6-d3d9-11ef-ba05-80851cfa91e9"
+  ]
+}

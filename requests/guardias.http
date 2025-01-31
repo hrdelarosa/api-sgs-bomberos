@@ -1,0 +1,14 @@
+### Crear una nueva guardia
+POST http://localhost:1234/api/guardias/crear
+Content-Type: application/json
+
+{
+  "guardia": "3er Guardia",
+  "estacion": "ecbe3852-ca51-11ef-a95a-24842a45da79"
+}
+
+### Eliminar una guardia guardada
+DELETE http://localhost:1234/api/guardias/eliminar/38e27e60-ca5d-11ef-a95a-24842a45da79
+
+### Recuperar todas las guardias guardadas
+GET http://localhost:1234/api/guardias

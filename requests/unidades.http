@@ -1,0 +1,42 @@
+### Crear una nueva unidad
+POST http://localhost:1234/api/unidades/crear
+Content-Type: application/json
+
+{
+  "tipo": "e70a052c-cd46-11ef-8762-48b2a523c160", 
+  "unidad": "120", 
+  "estado": "aeaa30c7-cd46-11ef-8762-48b2a523c160"
+}
+
+### Actualizar una unidad
+PATCH http://localhost:1234/api/unidades/actualizar/b1243048-d2b5-11ef-83bf-772d7de91ccd
+Content-Type: application/json
+
+{
+  "estado": "aeaa30c7-cd46-11ef-8762-48b2a523c160"
+}
+
+### Eliminar la unidad guardada
+DELETE http://localhost:1234/api/unidades/eliminar/c199a029-d2b0-11ef-83bf-772d7de91ccd
+
+### Recuperar todas las unidades guardadas
+GET http://localhost:1234/api/unidades
+
+
+
+
+### Tipo Unidades
+### Crear un nuevo tipo de unidad
+
+POST http://localhost:1234/api/unidades/tipo/crear
+Content-Type: application/json
+
+{
+  "tipo": "motobomba"
+}
+
+### Eliminar un tipo de unidad
+DELETE  http://localhost:1234/api/unidades/tipo/eliminar/40e2cae5-d2d9-11ef-83bf-772d7de91ccd
+
+### Obtener los tipos de unidad
+GET  http://localhost:1234/api/unidades/tipo
