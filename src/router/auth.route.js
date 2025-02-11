@@ -35,7 +35,7 @@ export const createAuthRouter = ({ authModel }) => {
   authRouter.post('/verify-email', authController.verifyEmail)
   // Reenviar el correo de verificación
   authRouter.post(
-    '/resend-verification-email',
+    '/resend-verify-email',
     authController.resendVerificationEmail
   )
   // Solicita un token para poder cambiar la contraseña

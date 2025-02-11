@@ -53,8 +53,8 @@ Content-Type: application/json
   "token": "3d6587ec6f1b6ab04d8f858820fae1442cbbd2ec8592eb6d64a58e5f37afd7c5"
 }
 
-### Reenviar el correo de verificación
-POST http://localhost:1234/api/auth/resend-verification-email
+### Reenviar el código para la verificación del correo
+POST http://localhost:1234/api/auth/resend-verify-email
 Content-Type: application/json
 
 {

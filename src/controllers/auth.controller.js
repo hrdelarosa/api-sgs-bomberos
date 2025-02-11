@@ -227,7 +227,7 @@ export class AuthController {
         token: newToken,
       })
 
-      await this.sendVerificationEmail({ correo, token: newToken })
+      await this.reesendVerificationEmail({ correo, token: newToken })
 
       res.status(200).json({ message: 'Nuevo correo de verificación enviado' })
     } catch (error) {
@@ -295,6 +295,25 @@ export class AuthController {
         <p>Para confirmar tu <b>cuenta</b>, necesitamos verificar tu dirección de correo electrónico</p>
         <p>Código de verificación: <b>${token}</b><br/>Puedes copiar este código y, una vez en la página, ingresarlo para completar el proceso.</p>
         <p>Puedes hacer clic en el siguiente enlace para poder ingresar el código y validar tu correo:</p>
+        <p><a href="${
+          EnvConfig().app_url
+        }/verify-email">Ir a verificar mi cuenta</a></p>
+        <strong>Nota: El código es válido por 30 minutos. Si no solicitaste este registro, por favor ignora este mensaje.</strong>
+      `,
+    })
+  }
+
+  reesendVerificationEmail = async ({ correo, token }) => {
+    await transporter.sendMail({
+      from: EnvConfig().email_user,
+      to: correo,
+      subject: 'Verifica tu correo electrónico para el Sistema de Bomberos',
+      html: `
+        <h2>Nuevo códico de verificación</h2>
+        <p>Copiar el código y, una vez en la página, ingresarlo para completar el proceso.</p>
+        <p>Código de verificación: <b>${token}</b></p>
+        <strong>¡El código es válido solo por 30 minutos!</strong>
+        <p>Puedes hacer clic en el siguiente enlace para poder ingresar el código y validar tu correo, o volver a la página:</p>
         <p><a href="${
           EnvConfig().app_url
         }/verify-email">Ir a verificar mi cuenta</a></p>
