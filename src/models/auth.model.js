@@ -8,10 +8,11 @@ export class AuthModel {
     const { nombres, apellidos, correo, contraseña } = input
     const hashedPassword = await bcrypt.hash(contraseña, 10)
     const tokenVerifi = crypto.randomBytes(32).toString('hex')
+    const tokenExpiryDate = new Date(Date.now() + 1800000) // 30 minutos de caducidad
 
     try {
       await connection.query(
-        'INSERT INTO usuarios (us_nombres, us_apellidos, us_correo, us_contraseña, rol_id_us, est_id_us, us_tokenVerificacion) VALUES (?, ?, ?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?), ?);',
+        'INSERT INTO usuarios (us_nombres, us_apellidos, us_correo, us_contraseña, rol_id_us, est_id_us, us_tokenVerificacion, us_tokenVerificacionExpiracion) VALUES (?, ?, ?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?);',
         [
           nombres,
           apellidos,
@@ -20,6 +21,7 @@ export class AuthModel {
           rol.id,
           estado.id,
           tokenVerifi,
+          tokenExpiryDate,
         ]
       )
 
@@ -34,11 +36,24 @@ export class AuthModel {
   static async verificarCorreo({ token }) {
     try {
       await connection.query(
-        'UPDATE usuarios SET us_verificado = true, us_tokenVerificacion = NULL WHERE us_tokenVerificacion = ?;',
+        'UPDATE usuarios SET us_verificado = true, us_tokenVerificacion = NULL, us_tokenVerificacionExpiracion = NULL WHERE us_tokenVerificacion = ? AND us_tokenVerificacionExpiracion > NOW();',
         [token]
       )
     } catch (error) {
       throwError('Error al verificar el correo electronico del usuario', error)
+    }
+  }
+
+  static async actualizarTokenVerificacion({ correo, token }) {
+    const tokenExpiryDate = new Date(Date.now() + 1800000) // 30 minutos de caducidad
+
+    try {
+      await connection.query(
+        'UPDATE usuarios SET us_tokenVerificacion = ?, us_tokenVerificacionExpiracion = ? WHERE us_correo = ? AND us_verificado = false;',
+        [token, tokenExpiryDate, correo]
+      )
+    } catch (error) {
+      throwError('Error al actualizar el token de verificación', error)
     }
   }
 
@@ -117,6 +132,22 @@ export class AuthModel {
       )
     } catch (error) {
       throwError('Error al encontrar el token', error)
+    }
+  }
+
+  static async obtenerPorTokenVerificacion({ token }) {
+    try {
+      const [usuario] = await connection.query(
+        'SELECT * FROM usuarios WHERE us_tokenVerificacion = ? AND us_tokenVerificacionExpiracion > NOW();',
+        [token]
+      )
+
+      return usuario[0] || null
+    } catch (error) {
+      throwError(
+        'Error al obtener el usuario por el token de verificación',
+        error
+      )
     }
   }
 }

@@ -32,7 +32,12 @@ export const createAuthRouter = ({ authModel }) => {
   // Refresca el token(cookie) si el usuario esta activo en la apliación
   authRouter.post('/refresh-token', authController.refreshToken)
   // Verificar el correo electronico por medio de un token
-  authRouter.get('/verify-email/:token', authController.verifyEmail)
+  authRouter.post('/verify-email', authController.verifyEmail)
+  // Reenviar el correo de verificación
+  authRouter.post(
+    '/resend-verification-email',
+    authController.resendVerificationEmail
+  )
   // Solicita un token para poder cambiar la contraseña
   authRouter.post(
     '/request-password-reset',

@@ -188,15 +188,51 @@ export class AuthController {
   }
 
   verifyEmail = async (req, res) => {
-    const { token } = req.params
+    const { token } = req.body
 
     try {
+      const usuario = await this.authModel.obtenerPorTokenVerificacion({
+        token,
+      })
+
+      if (!usuario)
+        return res
+          .status(400)
+          .json({ message: 'Código de verificación inválido o no existe' })
+
       await this.authModel.verificarCorreo({ token })
 
       res.status(200).json({ message: 'Correo verificado exitosamente' })
     } catch (error) {
       res.status(500).json({
         message: `Error al verificar el correo: ${error.message}`,
+      })
+    }
+  }
+
+  resendVerificationEmail = async (req, res) => {
+    const { correo } = req.body
+
+    try {
+      const usuario = await this.authModel.obtenerPorCorreo({ correo })
+
+      if (!usuario || usuario.us_verificado)
+        return res
+          .status(400)
+          .json({ message: 'Correo no encontrado o ya verificado' })
+
+      const newToken = crypto.randomBytes(32).toString('hex')
+      await this.authModel.actualizarTokenVerificacion({
+        correo,
+        token: newToken,
+      })
+
+      await this.sendVerificationEmail({ correo, token: newToken })
+
+      res.status(200).json({ message: 'Nuevo correo de verificación enviado' })
+    } catch (error) {
+      res.status(500).json({
+        message: `Error al reenviar el correo de verificación: ${error.message}`,
       })
     }
   }
@@ -253,13 +289,16 @@ export class AuthController {
     await transporter.sendMail({
       from: EnvConfig().email_user,
       to: correo,
-      subject: 'Verifica tu correo electrónico',
+      subject: 'Verifica tu correo electrónico para el Sistema de Bomberos',
       html: `
-        <h1>Verifica tu correo electrónico</h1>
-        <p>Haz clic en el siguiente enlace para verificar tu cuenta:</p>
-        <a href="${
+        <h2>Gracias por registrarte</h2>
+        <p>Para confirmar tu <b>cuenta</b>, necesitamos verificar tu dirección de correo electrónico</p>
+        <p>Código de verificación: <b>${token}</b><br/>Puedes copiar este código y, una vez en la página, ingresarlo para completar el proceso.</p>
+        <p>Puedes hacer clic en el siguiente enlace para poder ingresar el código y validar tu correo:</p>
+        <p><a href="${
           EnvConfig().app_url
-        }/verify-email/${token}">Verificar correo</a>
+        }/verify-email">Ir a verificar mi cuenta</a></p>
+        <strong>Nota: El código es válido por 30 minutos. Si no solicitaste este registro, por favor ignora este mensaje.</strong>
       `,
     })
   }
@@ -268,11 +307,18 @@ export class AuthController {
     await transporter.sendMail({
       from: EnvConfig().email_user,
       to: correo,
-      subject: 'Restablecer contraseña',
+      subject: 'Restablecer tu contraseña en el Sistema de Bomberos',
       html: `
-        <h1>Restablece tu contraseña</h1>
-        <p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
-        <a href="${process.env.APP_URL}/reset-password/${token}">Cambiar contraseña</a>
+        <h2>Restablece tu contraseña</h2>
+        <p>Hemos recibido una solicitud para restablecer tu contraseña en [Nombre del Proyecto]. Si no realizaste esta solicitud, puedes ignorar este correo.</p>
+        <p>Código para restablecer:</p>
+        <span>${token}</span>
+        <br/>
+        <p>Puedes copiar este código y, una vez en la página, ingresarlo para completar el proceso.</p>
+        <p>Haz clic en el siguiente enlace para ingresar el código y cambiar tu contraseña:</p>
+        <a href="${process.env.APP_URL}/reset-password/">Ir para cambiar mi contraseña</a>
+        <br/>
+        <strong>Nota: El código es válido por 30 minutos. Si no solicitaste este registro, por favor ignora este mensaje.</strong>
       `,
     })
   }

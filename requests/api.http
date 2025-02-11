@@ -1,22 +1,22 @@
 ### Registra un nuevo usuario 
-POST http://localhost:1234/api/auth/registrar
+POST http://localhost:1234/api/auth/register
 Content-Type: application/json
 
-# {
-#   "nombres": "Super Usuario",
-#   "apellidos": "Admin",
-#   "correo": "admin@gmail.com",
-#   "contraseña": "123456",
-#   "confirmarContraseña": "123456"
-# }
-
 {
-  "nombres": "Hozmel Roberto",
-  "apellidos": "De la Rosa Rendón",
-  "correo": "hozmel.robert@gmail.com",
+  "nombres": "Super Usuario",
+  "apellidos": "Admin",
+  "correo": "admin@gmail.com",
   "contraseña": "123456",
   "confirmarContraseña": "123456"
 }
+
+# {
+#   "nombres": "Hozmel Roberto",
+#   "apellidos": "De la Rosa Rendón",
+#   "correo": "hozmel.robert@gmail.com",
+#   "contraseña": "123456",
+#   "confirmarContraseña": "123456"
+# }
 
 ### Iniciar sesión 
 POST http://localhost:1234/api/auth/login
@@ -46,7 +46,24 @@ GET http://localhost:1234/api/auth/verify-token
 
 
 ### Verificar correo
-GET http://localhost:1234/api/auth/verify-email/aa85c37aa9b5d6b9de227c5874e51bfb3f1bf0f654977e95ffa9be0402c6cbca
+POST http://localhost:1234/api/auth/verify-email
+Content-Type: application/json
+
+{
+  "token": "3d6587ec6f1b6ab04d8f858820fae1442cbbd2ec8592eb6d64a58e5f37afd7c5"
+}
+
+### Reenviar el correo de verificación
+POST http://localhost:1234/api/auth/resend-verification-email
+Content-Type: application/json
+
+{
+  "correo": "admin@gmail.com"
+}
+
+# {
+#   "correo": "hozmel.robert@gmail.com"
+# }
 
 ### Solicitar restablecimiento de contraseña
 POST http://localhost:1234/api/auth/request-password-reset
