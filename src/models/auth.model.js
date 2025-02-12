@@ -7,7 +7,11 @@ export class AuthModel {
   static async crear({ input, rol, estado }) {
     const { nombres, apellidos, correo, contraseña } = input
     const hashedPassword = await bcrypt.hash(contraseña, 10)
-    const tokenVerifi = crypto.randomBytes(32).toString('hex')
+    const tokenVerifi = crypto
+      .randomBytes(16)
+      .toString('hex')
+      .match(/.{1,8}/g)
+      .join('-')
     const tokenExpiryDate = new Date(Date.now() + 1800000) // 30 minutos de caducidad
 
     try {

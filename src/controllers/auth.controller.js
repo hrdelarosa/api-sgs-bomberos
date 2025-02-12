@@ -198,7 +198,7 @@ export class AuthController {
       if (!usuario)
         return res
           .status(400)
-          .json({ message: 'Código de verificación inválido o no existe' })
+          .json({ message: 'Código de verificación es inválido o caducado' })
 
       await this.authModel.verificarCorreo({ token })
 
@@ -221,7 +221,11 @@ export class AuthController {
           .status(400)
           .json({ message: 'Correo no encontrado o ya verificado' })
 
-      const newToken = crypto.randomBytes(32).toString('hex')
+      const newToken = crypto
+        .randomBytes(16)
+        .toString('hex')
+        .match(/.{1,8}/g)
+        .join('-')
       await this.authModel.actualizarTokenVerificacion({
         correo,
         token: newToken,
@@ -248,7 +252,11 @@ export class AuthController {
           .status(404)
           .json({ message: 'Correo no encontrado o no verificado' })
 
-      const resetToken = crypto.randomBytes(32).toString('hex')
+      const resetToken = crypto
+        .randomBytes(16)
+        .toString('hex')
+        .match(/.{1,8}/g)
+        .join('-')
 
       await this.authModel.saveResetToken({ correo, token: resetToken })
 

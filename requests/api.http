@@ -50,7 +50,7 @@ POST http://localhost:1234/api/auth/verify-email
 Content-Type: application/json
 
 {
-  "token": "3d6587ec6f1b6ab04d8f858820fae1442cbbd2ec8592eb6d64a58e5f37afd7c5"
+  "token": "a3f9c4b2-1d6e78f0-5bc2e9a1-8d34f7e2"
 }
 
 ### Reenviar el código para la verificación del correo
@@ -58,12 +58,8 @@ POST http://localhost:1234/api/auth/resend-verify-email
 Content-Type: application/json
 
 {
-  "correo": "admin@gmail.com"
+  "correo": "hozmel.robert@gmail.com"
 }
-
-# {
-#   "correo": "hozmel.robert@gmail.com"
-# }
 
 ### Solicitar restablecimiento de contraseña
 POST http://localhost:1234/api/auth/request-password-reset
