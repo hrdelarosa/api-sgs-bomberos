@@ -66,14 +66,15 @@ POST http://localhost:1234/api/auth/request-password-reset
 Content-Type: application/json
 
 {
-  "correo": "hozmel.robert@gmail.com"
+  "correo": "hozmel@gmail.com"
 }
 
 ### Restablecimiento de contraseña
-POST http://localhost:1234/api/auth/reset-password/eb5aebc75b21477478917fe4e56da94b299a83381e8b9f8780f3166e6e45aa96
+POST http://localhost:1234/api/auth/reset-password
 Content-Type: application/json
 
 {
+  "token": "235e7fe9-ac875c86-f28329db-ab4c2664",
   "contraseña": "chiga2008",
   "confirmarContraseña": "chiga2008"
 }

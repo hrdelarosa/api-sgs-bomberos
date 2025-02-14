@@ -44,8 +44,29 @@ export const loginSchema = z.object({
     .min(1, 'La contraseña es requerida'),
 })
 
+export const verifyEmailSchema = z.object({
+  token: z
+    .string({ required_error: 'El código es requerido' })
+    .regex(/^[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}$/, {
+      message:
+        'El código debe tener el formato correcto (hexadecimal con guiones).',
+    }),
+})
+
+export const requestWithEmail = z.object({
+  correo: z
+    .string({ required_error: 'El correo es requerido' })
+    .email({ message: 'Ingrese un correo válido' }),
+})
+
 export const resetPassSchema = z
   .object({
+    token: z
+      .string({ required_error: 'El código es requerido' })
+      .regex(/^[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}$/, {
+        message:
+          'El código debe tener el formato correcto (hexadecimal con guiones).',
+      }),
     contraseña: z
       .string({ required_error: 'La contraseña es requerida' })
       .min(6, 'La contraseña debe de tener al menos 6 caracteres')

@@ -198,7 +198,7 @@ export class AuthController {
       if (!usuario)
         return res
           .status(400)
-          .json({ message: 'Código de verificación es inválido o caducado' })
+          .json({ message: 'Código de verificación inválido o no existe' })
 
       await this.authModel.verificarCorreo({ token })
 
@@ -231,7 +231,7 @@ export class AuthController {
         token: newToken,
       })
 
-      await this.reesendVerificationEmail({ correo, token: newToken })
+      await this.sendVerificationEmail({ correo, token: newToken })
 
       res.status(200).json({ message: 'Nuevo correo de verificación enviado' })
     } catch (error) {
@@ -271,7 +271,7 @@ export class AuthController {
   }
 
   resetPassword = async (req, res) => {
-    const { token } = req.params
+    const { token } = req.body
     const { contraseña } = req.body
 
     try {
@@ -311,25 +311,6 @@ export class AuthController {
     })
   }
 
-  reesendVerificationEmail = async ({ correo, token }) => {
-    await transporter.sendMail({
-      from: EnvConfig().email_user,
-      to: correo,
-      subject: 'Verifica tu correo electrónico para el Sistema de Bomberos',
-      html: `
-        <h2>Nuevo códico de verificación</h2>
-        <p>Copiar el código y, una vez en la página, ingresarlo para completar el proceso.</p>
-        <p>Código de verificación: <b>${token}</b></p>
-        <strong>¡El código es válido solo por 30 minutos!</strong>
-        <p>Puedes hacer clic en el siguiente enlace para poder ingresar el código y validar tu correo, o volver a la página:</p>
-        <p><a href="${
-          EnvConfig().app_url
-        }/verify-email">Ir a verificar mi cuenta</a></p>
-        <strong>Nota: El código es válido por 30 minutos. Si no solicitaste este registro, por favor ignora este mensaje.</strong>
-      `,
-    })
-  }
-
   sendPasswordResetEmail = async ({ correo, token }) => {
     await transporter.sendMail({
       from: EnvConfig().email_user,
@@ -337,15 +318,11 @@ export class AuthController {
       subject: 'Restablecer tu contraseña en el Sistema de Bomberos',
       html: `
         <h2>Restablece tu contraseña</h2>
-        <p>Hemos recibido una solicitud para restablecer tu contraseña en [Nombre del Proyecto]. Si no realizaste esta solicitud, puedes ignorar este correo.</p>
-        <p>Código para restablecer:</p>
-        <span>${token}</span>
-        <br/>
-        <p>Puedes copiar este código y, una vez en la página, ingresarlo para completar el proceso.</p>
+        <p>Hemos recibido una solicitud para restablecer tu contraseña en Sistema de Bomberos. Si no realizaste esta solicitud, puedes ignorar este correo.</p>
+        <p>Código para restablecer contraseña: <b>${token}</b><br/>Copiar este código y, una vez en la página, ingresarlo para completar el proceso.</p>
         <p>Haz clic en el siguiente enlace para ingresar el código y cambiar tu contraseña:</p>
-        <a href="${process.env.APP_URL}/reset-password/">Ir para cambiar mi contraseña</a>
-        <br/>
-        <strong>Nota: El código es válido por 30 minutos. Si no solicitaste este registro, por favor ignora este mensaje.</strong>
+        <a href="${process.env.APP_URL}/reset-password">Ir para cambiar mi contraseña</a>
+        <p><strong>Nota: El código es válido por 30 minutos. Si no solicitaste este registro, por favor ignora este mensaje.</strong></p>
       `,
     })
   }

@@ -4,7 +4,9 @@ import { validateSchema } from '../middleware/validateSchema.js'
 import {
   loginSchema,
   registerSchema,
+  requestWithEmail,
   resetPassSchema,
+  verifyEmailSchema,
 } from '../schemas/auth.schema.js'
 import { authRequired } from '../middleware/auth.js'
 
@@ -32,22 +34,26 @@ export const createAuthRouter = ({ authModel }) => {
   // Refresca el token(cookie) si el usuario esta activo en la apliación
   authRouter.post('/refresh-token', authController.refreshToken)
   // Verificar el correo electronico por medio de un token
-  authRouter.post('/verify-email', authController.verifyEmail)
+  authRouter.post(
+    '/verify-email',
+    validateSchema(verifyEmailSchema),
+    authController.verifyEmail
+  )
   // Reenviar el correo de verificación
   authRouter.post(
     '/resend-verify-email',
+    validateSchema(requestWithEmail),
     authController.resendVerificationEmail
   )
   // Solicita un token para poder cambiar la contraseña
   authRouter.post(
     '/request-password-reset',
-    authRequired,
+    validateSchema(requestWithEmail),
     authController.requestPasswordReset
   )
   // Cambiar la contraseña
   authRouter.post(
-    '/reset-password/:token',
-    authRequired,
+    '/reset-password',
     validateSchema(resetPassSchema),
     authController.resetPassword
   )

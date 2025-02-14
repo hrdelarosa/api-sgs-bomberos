@@ -127,7 +127,7 @@ export class AuthModel {
   }
 
   static async saveResetToken({ correo, token }) {
-    const expiryDate = new Date(Date.now() + 3600000)
+    const expiryDate = new Date(Date.now() + 3600000) // 1 hora de caducidad
 
     try {
       await connection.execute(
