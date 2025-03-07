@@ -81,6 +81,7 @@ export class ServiciosModel {
 
       return servicio[0] || null
     } catch (error) {
+      console.log(error)
       throwError('Error al obtener el servicio', error)
     }
   }
@@ -106,6 +107,7 @@ export class ServiciosModel {
         [id, idPersonal]
       )
     } catch (error) {
+      console.log(error)
       throwError(
         'Error al insertar el personal involucrado en el servicio',
         error

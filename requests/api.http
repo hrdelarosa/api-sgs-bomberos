@@ -6,8 +6,8 @@ Content-Type: application/json
   "nombres": "Super Usuario",
   "apellidos": "Admin",
   "correo": "admin@gmail.com",
-  "contraseña": "123456",
-  "confirmarContraseña": "123456"
+  "contraseña": "admin123",
+  "confirmarContraseña": "admin123"
 }
 
 # {
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
   "correo": "admin@gmail.com",
-  "contraseña": "123456"
+  "contraseña": "admin123"
 }
 
 # {
@@ -36,7 +36,7 @@ Content-Type: application/json
 POST http://localhost:1234/api/auth/logout
 
 ### Obtener el perfil del usuario
-GET http://localhost:1234/api/auth/profile/f3d94723-cd4d-11ef-8762-48b2a523c160
+GET http://localhost:1234/api/auth/profile/71c4456b-fb17-11ef-b9d1-a2cc1a1d4502
 
 ### Configuarar el perfil del usuario
 GET http://localhost:1234/api/auth/profile/settings/f3d94723-cd4d-11ef-8762-48b2a523c160

@@ -16,7 +16,7 @@ export class AuthModel {
 
     try {
       await connection.query(
-        'INSERT INTO usuarios (us_nombres, us_apellidos, us_correo, us_contraseña, rol_id_us, est_id_us, us_tokenVerificacion, us_tokenVerificacionExpiracion) VALUES (?, ?, ?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?);',
+        'INSERT INTO usuarios (us_id, us_nombres, us_apellidos, us_correo, us_contraseña, rol_id_us, est_id_us, us_tokenVerificacion, us_tokenVerificacionExpiracion) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?, ?, UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?);',
         [
           nombres,
           apellidos,

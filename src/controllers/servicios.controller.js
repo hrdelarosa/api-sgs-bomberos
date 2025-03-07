@@ -51,16 +51,16 @@ export class ServiciosController {
         }
       }
 
-      if (incendio && Object.keys(incendio).length > 0)
+      if (incendio && Object.keys(incendio).some((key) => incendio[key] !== ''))
         await IncidentesModel.insertarIncendio({ input: incendio, id })
 
-      if (fuga && Object.keys(fuga).length > 0)
+      if (fuga && Object.keys(fuga).some((key) => fuga[key] !== ''))
         await IncidentesModel.insertarFuga({ input: fuga, id })
 
-      if (abejas && Object.keys(abejas).length > 0)
+      if (abejas && Object.keys(abejas).some((key) => abejas[key] !== ''))
         await IncidentesModel.insertarAbejas({ input: abejas, id })
 
-      if (rescate && Object.keys(rescate).length > 0)
+      if (rescate && Object.keys(rescate).some((key) => rescate[key] !== ''))
         await IncidentesModel.insertarRescate({ input: rescate, id })
 
       if (daños && Object.values(daños).some((value) => value !== ''))
