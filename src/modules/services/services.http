@@ -1,0 +1,78 @@
+### Crear un nuevo servicio
+POST http://localhost:1234/api/services/create
+Content-Type: application/json
+
+{
+  "usuario": "71c4456b-fb17-11ef-b9d1-a2cc1a1d4502",
+  "nombre": "Alejandra Lopez", 
+  "telefono": "9211734040", 
+  "salida": "02:10", 
+  "llegada": "02:20", 
+  "control": "02:40", 
+  "base": "02:55", 
+  "incidente": "abejas", 
+  "ubicacion": "Calle 15 entre calle 19 Col. Icacos",
+  "otro": "", 
+  "observaciones": "Se talo un arbol de roble que estaba recargado sobre una barda",
+  "unidades": [
+    "3f92eeb2-faf1-11ef-b9d1-a2cc1a1d4502",
+    "3f92f488-faf1-11ef-b9d1-a2cc1a1d4502"
+  ],
+  "personal": [
+    "1d230028-fb06-11ef-b9d1-a2cc1a1d4502",
+    "1d23287a-fb06-11ef-b9d1-a2cc1a1d4502",
+    "1d2329e3-fb06-11ef-b9d1-a2cc1a1d4502",
+    "1d232b45-fb06-11ef-b9d1-a2cc1a1d4502"
+  ],
+  "incendio": {
+    "inmueble": "",
+    "inmEspecifique": "",
+    "otro": "",
+    "otrEspecifique": ""
+  },
+  "fugaDerrame": {
+    "fuga": "",
+    "capacidad": "",
+    "especifique": "",
+    "empresa": "",
+    "noGuia": "",
+    "material": "",
+    "observaciones": ""
+  },
+  "abejas": {
+    "abeja": "",
+    "especifique": "",
+    "observaciones": ""
+  },
+  "rescate": {
+    "heridos": "",
+    "cadaveres": "",
+    "ambulancia": "",
+    "equipo": "",
+    "noPersonal": "",
+    "especifique": ""
+  },
+  "daños": {
+    "material": "",
+    "especifique": "",
+    "heridos": "",
+    "muertos": "",
+    "ambulancia": ""
+  },
+  "legales": {
+    "legal": "",
+    "otro": ""
+  }
+}
+
+### Eliminar un servicio 
+DELETE http://localhost:1234/api/services/eliminar/3e0eb0c1-826e-4d59-81be-b35ed62e81af
+
+### Obtener todos los servicios
+GET http://localhost:1234/api/services?page=1
+
+### Obtener un servicio por el id
+GET http://localhost:1234/api/services/a1e1ca78-54ec-4179-85fe-48f4b21d4420
+
+### Obtener los servicios del creador - Con "?limit=n" puedes elegir la cantidad de servicios
+GET http://localhost:1234/api/services/creator/71c4456b-fb17-11ef-b9d1-a2cc1a1d4502

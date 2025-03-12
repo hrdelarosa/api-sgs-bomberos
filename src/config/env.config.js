@@ -1,7 +1,7 @@
 import '../lib/loadEnv.js'
 
 const {
-  JWT_SECRET: jwt_secret = 'esta es otra clave',
+  JWT_SECRET: jwt_secret,
   GMAIL_EMAIL: gmail_email,
   EMIAL_PASS: email_pass,
   GOOGLE_CLIENT_ID: client_id,

@@ -1,33 +1,43 @@
-import express, { json } from 'express'
 import './lib/loadEnv.js'
+import express, { json } from 'express'
 import cookieParser from 'cookie-parser'
+// import { createAuthRouter } from './router/auth.route.js'
+// import { createRolesRouter } from './router/roles.route.js'
+// import { createEstadosRouter } from './router/estados.route.js'
+// import { createUnidadesRouter } from './router/unidades.route.js'
+// import { createPersonalRouter } from './router/personal.route.js'
+// import { createGuardiasRouter } from './router/guardias.route.js'
+// import { createRangosRouter } from './router/rangos.route.js'
+// import { createUsuariosRouter } from './router/usuarios.route.js'
+// import { createServiciosRouter } from './router/servicios.route.js'
+// import { createEstacionesRouter } from './router/estaciones.router.js'
+import { createAuthRouter } from './modules/auth/routes/authRoute.js'
+import { createRolesRouter } from './modules/roles/router/rolesRoute.js'
+import { createStatesRouter } from './modules/states/router/statesRoute.js'
+import { createUnitsRouter } from './modules/units/router/unitsRoute.js'
+import { createTypesRouter } from './modules/units/router/typesRoute.js'
+import { createPersonnelRouter } from './modules/personnel/router/personnelRoute.js'
+import { createGuardsRouter } from './modules/guards/router/guardsRoute.js'
+import { createRanksRouter } from './modules/ranks/router/ranksRoute.js'
+import { createUsersRouter } from './modules/users/router/usersRoute.js'
+import { createServicesRouter } from './modules/services/router/servicesRoute.js'
+import { createStatesServicesRouter } from './modules/services/router/statesServicesRoute.js'
+import { createStationsRouter } from './modules/stations/router/stationsRoute.js'
 import { corsMiddleware } from './middleware/cors.js'
-import { createRolesRouter } from './router/roles.route.js'
-import { createEstadosRouter } from './router/estados.route.js'
-import { createAuthRouter } from './router/auth.route.js'
-import { createUnidadesRouter } from './router/unidades.route.js'
-import { createGuardiasRouter } from './router/guardias.route.js'
-import { createEstacionesRouter } from './router/estaciones.router.js'
-import { createPersonalRouter } from './router/personal.route.js'
-import { createRangosRouter } from './router/rangos.route.js'
-import { createEconomicosRouter } from './router/economicos.route.js'
-import { createVacacionesRouter } from './router/vacaciones.route.js'
-import { createUsuariosRouter } from './router/usuarios.route.js'
-import { createServiciosRouter } from './router/servicios.route.js'
 
 export const createApp = ({
-  rolesModel,
-  estadosModel,
   authModel,
-  unidadesModel,
-  guardiasModel,
-  estacionesModel,
-  personalModel,
-  rangosModel,
-  economicosModel,
-  vacacionesModel,
-  usuariosModel,
-  serviciosModel,
+  rolesModel,
+  statesModel,
+  unitsModel,
+  typesModel,
+  personnelModel,
+  guardsModel,
+  ranksModel,
+  usersModel,
+  servicesModel,
+  statesServicesModel,
+  stationsModel,
 }) => {
   const app = express()
 
@@ -36,18 +46,21 @@ export const createApp = ({
   app.use(cookieParser())
   app.disable('x-powered-by')
 
-  app.use('/api/roles', createRolesRouter({ rolesModel }))
-  app.use('/api/estados', createEstadosRouter({ estadosModel }))
   app.use('/api/auth', createAuthRouter({ authModel }))
-  app.use('/api/unidades', createUnidadesRouter({ unidadesModel }))
-  app.use('/api/guardias', createGuardiasRouter({ guardiasModel }))
-  app.use('/api/estaciones', createEstacionesRouter({ estacionesModel }))
-  app.use('/api/personal', createPersonalRouter({ personalModel }))
-  app.use('/api/rangos', createRangosRouter({ rangosModel }))
-  app.use('/api/dias', createEconomicosRouter({ economicosModel }))
-  app.use('/api/vacaciones', createVacacionesRouter({ vacacionesModel }))
-  app.use('/api/usuarios', createUsuariosRouter({ usuariosModel }))
-  app.use('/api/servicios', createServiciosRouter({ serviciosModel }))
+  app.use('/api/roles', createRolesRouter({ rolesModel }))
+  app.use('/api/states', createStatesRouter({ statesModel }))
+  app.use('/api/units', createUnitsRouter({ unitsModel }))
+  app.use('/api/types', createTypesRouter({ typesModel }))
+  app.use('/api/personnel', createPersonnelRouter({ personnelModel }))
+  app.use('/api/guards', createGuardsRouter({ guardsModel }))
+  app.use('/api/ranks', createRanksRouter({ ranksModel }))
+  app.use('/api/users', createUsersRouter({ usersModel }))
+  app.use('/api/services', createServicesRouter({ servicesModel }))
+  app.use(
+    '/api/services/states',
+    createStatesServicesRouter({ statesServicesModel })
+  )
+  app.use('/api/stations', createStationsRouter({ stationsModel }))
 
   const PORT = process.env.PORT ?? 1234
 

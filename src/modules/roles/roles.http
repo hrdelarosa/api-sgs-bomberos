@@ -1,0 +1,19 @@
+### Crear un nuevo rol 
+POST http://localhost:1234/api/roles/crear
+Content-Type: application/json
+
+{
+  "nombre": "usuario",
+  "descripcion": "Rol para usuarios normales con acceso limitado."
+}
+
+### Actualizar el estado de un rol
+PATCH http://localhost:1234/api/roles/state/23aa9498-faeb-11ef-b9d1-a2cc1a1d4502
+Content-Type: application/json
+
+{
+  "estado": "a52e31fe-faea-11ef-b9d1-a2cc1a1d4502"
+}
+
+### Recuperar todos los roles guardados
+GET http://localhost:1234/api/roles

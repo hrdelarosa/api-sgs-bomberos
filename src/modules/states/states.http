@@ -1,0 +1,2 @@
+### Recuperar todos los estados 
+GET http://localhost:1234/api/states

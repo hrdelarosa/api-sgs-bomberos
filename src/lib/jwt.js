@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-export function crearAccesToken(payload) {
+export function createAccessToken(payload) {
   return new Promise((resolve, reject) => {
     jwt.sign(
       payload,

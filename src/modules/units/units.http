@@ -1,0 +1,22 @@
+### Crear una nueva unidad
+POST http://localhost:1234/api/units/create
+Content-Type: application/json
+
+{
+  "tipo": "791cea6c-fd2c-11ef-a43b-4955ce09c2b0", 
+  "numero": "101"
+}
+
+### Actualizar una unidad
+PATCH http://localhost:1234/api/units/state/b1243048-d2b5-11ef-83bf-772d7de91ccd
+Content-Type: application/json
+
+{
+  "estado": "aeaa30c7-cd46-11ef-8762-48b2a523c160"
+}
+
+### Eliminar la unidad guardada
+DELETE http://localhost:1234/api/units/delete/3f92b88a-faf1-11ef-b9d1-a2cc1a1d4502
+
+### Recuperar todas las units guardadas
+GET http://localhost:1234/api/units
