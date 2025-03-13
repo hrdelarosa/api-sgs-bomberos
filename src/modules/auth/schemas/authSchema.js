@@ -43,3 +43,42 @@ export const loginSchema = z.object({
     .string({ required_error: 'La contraseña es requerida' })
     .min(1, 'La contraseña es requerida'),
 })
+
+export const emailVerificationSchema = z.object({
+  token: z
+    .string({ required_error: 'El código es requerido' })
+    .regex(/^[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}$/, {
+      message:
+        'El código debe tener el formato correcto (hexadecimal con guiones).',
+    }),
+})
+
+export const resendEmailVerificationSchema = loginSchema.pick({
+  correo: true,
+})
+
+export const requestPasswordResetSchema = loginSchema.pick({
+  correo: true,
+})
+
+export const resetPasswordSchema = z
+  .object({
+    token: z
+      .string({ required_error: 'El código es requerido' })
+      .regex(/^[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}$/, {
+        message:
+          'El código debe tener el formato correcto (hexadecimal con guiones).',
+      }),
+    contraseña: z
+      .string({ required_error: 'La contraseña es requerida' })
+      .min(6, 'La contraseña debe de tener al menos 6 caracteres')
+      .max(30, 'La contraseña no puede exceder los 30 caracteres'),
+    confirmarContraseña: z
+      .string()
+      .min(6, { message: 'La contraseña debe de tener al menos 6 caracteres' })
+      .max(30, { message: 'La contraseña no puede exceder los 30 caracteres' }),
+  })
+  .refine((data) => data.contraseña === data.confirmarContraseña, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirmarContraseña'],
+  })
