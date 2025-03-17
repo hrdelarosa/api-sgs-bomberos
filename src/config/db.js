@@ -7,6 +7,7 @@ async function connectDataBase() {
     console.log('Conexión exitosa a la base de datos')
     return connection
   } catch (error) {
+    console.error('Error console', error)
     throw new Error('Error al conectar a la base de datos:', error)
   }
 }
