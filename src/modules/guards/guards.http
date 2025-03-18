@@ -14,4 +14,4 @@ DELETE http://localhost:1234/api/guards/delete/38e27e60-ca5d-11ef-a95a-24842a45d
 GET http://localhost:1234/api/guards
 
 ### Recuperar todas las guardias guardadas vinculadas a una estación
-GET http://localhost:1234/api/guards/544891fd-faeb-11ef-b9d1-a2cc1a1d4502
+GET http://localhost:1234/api/guards/5448c291-c3bd-c3ba-c3ab-11c3afc2b9c3

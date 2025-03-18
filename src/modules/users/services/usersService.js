@@ -72,4 +72,20 @@ export class UsersService {
       throw error
     }
   }
+
+  getUserById = async ({ id }) => {
+    try {
+      const userExists = await this.usersModel.findUserById({ id })
+
+      if (userExists === null) customError('El usuario no existe', 404)
+
+      return userExists
+    } catch (error) {
+      console.error(
+        'Error en el servicio de obtener el usuario por el id:',
+        error
+      )
+      throw error
+    }
+  }
 }

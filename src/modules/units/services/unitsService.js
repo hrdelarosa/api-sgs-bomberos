@@ -35,7 +35,7 @@ export class UnitsService {
     try {
       const unitExists = await this.unitsModel.findUnitByid({ id })
 
-      if (unitExists === null) customError('La unidad no existe', 409)
+      if (unitExists === null) customError('La unidad no existe', 404)
       if (unitExists.est_id_uni === 'inactivo')
         customError('La unidad ya esta inactiva', 409)
 

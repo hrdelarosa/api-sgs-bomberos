@@ -4,7 +4,7 @@ export class StationsModel {
   static async create({ nombre, ubicacion }) {
     try {
       await connection.query(
-        `INSERT INTO estaciones (et_id, et_nombre, et_ubicacion, est_id_et) VALUES(UUID_TO_BIN(UUID()), ?, ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
+        `INSERT INTO estaciones (et_id, et_nombre, et_ubicacion, est_id_et) VALUES (UNHEX(REPLACE(UUID(), '-', '')), ?, ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
         [nombre, ubicacion]
       )
     } catch (error) {
@@ -30,7 +30,7 @@ export class StationsModel {
   static async findStationById({ id }) {
     try {
       const [station] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_et FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id WHERE et_id = UUID_TO_BIN(?);',
+        'SELECT estados.est_nombre AS est_id_et FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id WHERE et_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -44,7 +44,7 @@ export class StationsModel {
   static async updateStatusById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE estaciones SET est_id_et = UUID_TO_BIN(?) WHERE et_id = UUID_TO_BIN(?);',
+        'UPDATE estaciones SET est_id_et = UNHEX(REPLACE(?, "-", "")) WHERE et_id = UNHEX(REPLACE(?, "-", ""));',
         [estado, id]
       )
     } catch (error) {
@@ -56,7 +56,7 @@ export class StationsModel {
   static async delete({ id }) {
     try {
       await connection.query(
-        'DELETE FROM estaciones WHERE et_id = UUID_TO_BIN(?);',
+        'DELETE FROM estaciones WHERE et_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
     } catch (error) {
@@ -68,7 +68,7 @@ export class StationsModel {
   static async estationRelatedGuard({ id }) {
     try {
       const [countUnits] = await connection.query(
-        'SELECT COUNT(*) as count FROM guardia WHERE et_id_gu = UUID_TO_BIN(?);',
+        'SELECT COUNT(*) as count FROM guardia WHERE et_id_gu = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -87,7 +87,7 @@ export class StationsModel {
   static async getStations() {
     try {
       const [stations] = await connection.query(
-        'SELECT BIN_TO_UUID(et_id) AS id, et_nombre, et_ubicacion, estados.est_nombre AS est_id_et FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id;'
+        'SELECT LOWER(CONCAT(LEFT(HEX(et_id), 8), "-", MID(HEX(et_id), 9, 4), "-", MID(HEX(et_id), 13, 4), "-", MID(HEX(et_id), 17, 4), "-", RIGHT(HEX(et_id), 12))) AS id, et_nombre, et_ubicacion, estados.est_nombre AS est_id_et FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id;'
       )
 
       return stations

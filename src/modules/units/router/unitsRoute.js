@@ -18,7 +18,7 @@ export const createUnitsRouter = ({ unitsModel }) => {
     validateSchema(updateUnitSchema),
     unitsController.changeUnitStatus
   )
-  unitsRouter.delete('delete/:id', unitsController.deleteUnit)
+  unitsRouter.delete('/delete/:id', unitsController.deleteUnit)
   unitsRouter.get('/', unitsController.getUnits)
 
   return unitsRouter

@@ -4,7 +4,7 @@ export class PersonnelModel {
   static async create({ nombre, apellidos, np, rango, base, guardia }) {
     try {
       await connection.query(
-        `INSERT INTO personal (per_id, per_nombres, per_apellidos, per_np, ran_id_per, per_base, gu_id_per, est_id_per) VALUES (UUID_TO_BIN(UUID()) , ?, ?, ?, UUID_TO_BIN(?), ?, UUID_TO_BIN(?), (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
+        `INSERT INTO personal (per_id, per_nombres, per_apellidos, per_np, ran_id_per, per_base, gu_id_per, est_id_per) VALUES (UNHEX(REPLACE(UUID(), '-', '')), ?, ?, ?, UNHEX(REPLACE(?, "-", "")), ?, UNHEX(REPLACE(?, "-", "")), (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
         [nombre, apellidos, np, rango, base, guardia]
       )
     } catch (error) {
@@ -30,7 +30,7 @@ export class PersonnelModel {
   static async updateStatusById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE personal SET est_id_per = UUID_TO_BIN(?) WHERE per_id = UUID_TO_BIN(?);',
+        'UPDATE personal SET est_id_per = UNHEX(REPLACE(?, "-", "")) WHERE per_id = UNHEX(REPLACE(?, "-", ""));',
         [estado, id]
       )
     } catch (error) {
@@ -42,7 +42,7 @@ export class PersonnelModel {
   static async findPersonnelById({ id }) {
     try {
       const [person] = await connection.query(
-        'SELECT per_nombres, estados.est_nombre AS est_id_per FROM personal LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE per_id = UUID_TO_BIN(?);',
+        'SELECT per_nombres, estados.est_nombre AS est_id_per FROM personal LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE per_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -56,7 +56,7 @@ export class PersonnelModel {
   static async delete({ id }) {
     try {
       await connection.query(
-        'DELETE FROM personal WHERE per_id = UUID_TO_BIN(?);',
+        'DELETE FROM personal WHERE per_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
     } catch (error) {
@@ -68,7 +68,7 @@ export class PersonnelModel {
   static async personnelRelatedService({ id }) {
     try {
       const countService = await connection.query(
-        'SELECT COUNT(*) AS count FROM servicio_personal WHERE sp_personal_id = UUID_TO_BIN(?);',
+        'SELECT COUNT(*) AS count FROM servicio_personal WHERE sp_personal_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -87,7 +87,7 @@ export class PersonnelModel {
   static async getPersonnel() {
     try {
       const [personnel] = await connection.query(
-        'SELECT BIN_TO_UUID(per_id) AS id, per_nombres, per_apellidos, per_np, rango.ran_nombre, per_base, guardia.gu_nombre, est.et_nombre, per_diasEco, per_vacaciones, estados.est_nombre AS est_id_per FROM personal LEFT JOIN rango ON personal.ran_id_per = rango.ran_id LEFT JOIN guardia ON personal.gu_id_per = guardia.gu_id LEFT JOIN estaciones est ON guardia.et_id_gu = est.et_id LEFT JOIN estados ON personal.est_id_per = estados.est_id ORDER BY gu_nombre ASC;'
+        'SELECT LOWER(CONCAT(LEFT(HEX(per_id), 8), "-", MID(HEX(per_id), 9, 4), "-", MID(HEX(per_id), 13, 4), "-", MID(HEX(per_id), 17, 4), "-", RIGHT(HEX(per_id), 12))) AS id, per_nombres, per_apellidos, per_np, rango.ran_nombre, per_base, guardia.gu_nombre, est.et_nombre, per_diasEco, per_vacaciones, estados.est_nombre AS est_id_per FROM personal LEFT JOIN rango ON personal.ran_id_per = rango.ran_id LEFT JOIN guardia ON personal.gu_id_per = guardia.gu_id LEFT JOIN estaciones est ON guardia.et_id_gu = est.et_id LEFT JOIN estados ON personal.est_id_per = estados.est_id ORDER BY gu_nombre ASC;'
       )
 
       return personnel
@@ -100,7 +100,7 @@ export class PersonnelModel {
   static async getPersonnelPerRank({ id }) {
     try {
       const [personnel] = await connection.query(
-        'SELECT BIN_TO_UUID(per_id) AS id, per_nombres, per_apellidos, per_np, rango.ran_nombre, per_base, guardia.gu_nombre, est.et_nombre, per_diasEco, per_vacaciones, estados.est_nombre AS est_id_per FROM personal LEFT JOIN rango ON personal.ran_id_per = rango.ran_id LEFT JOIN guardia ON personal.gu_id_per = guardia.gu_id LEFT JOIN estaciones est ON guardia.et_id_gu = est.et_id LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE ran_id_per = UUID_TO_BIN(?) ORDER BY gu_nombre ASC;',
+        'SELECT LOWER(CONCAT(LEFT(HEX(per_id), 8), "-", MID(HEX(per_id), 9, 4), "-", MID(HEX(per_id), 13, 4), "-", MID(HEX(per_id), 17, 4), "-", RIGHT(HEX(per_id), 12))) AS id, per_nombres, per_apellidos, per_np, rango.ran_nombre, per_base, guardia.gu_nombre, est.et_nombre, per_diasEco, per_vacaciones, estados.est_nombre AS est_id_per FROM personal LEFT JOIN rango ON personal.ran_id_per = rango.ran_id LEFT JOIN guardia ON personal.gu_id_per = guardia.gu_id LEFT JOIN estaciones est ON guardia.et_id_gu = est.et_id LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE ran_id_per = UNHEX(REPLACE(?, "-", "")) ORDER BY gu_nombre ASC;',
         [id]
       )
 
@@ -114,7 +114,7 @@ export class PersonnelModel {
   static async getPersonnelPerGuard({ id }) {
     try {
       const [personnel] = await connection.query(
-        'SELECT BIN_TO_UUID(per_id) AS id, per_nombres, per_apellidos, per_np, rango.ran_nombre, per_base, guardia.gu_nombre, est.et_nombre, per_diasEco, per_vacaciones, estados.est_nombre AS est_id_per FROM personal LEFT JOIN rango ON personal.ran_id_per = rango.ran_id LEFT JOIN guardia ON personal.gu_id_per = guardia.gu_id LEFT JOIN estaciones est ON guardia.et_id_gu = est.et_id LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE gu_id_per = UUID_TO_BIN(?) ORDER BY gu_nombre ASC;',
+        'SELECT LOWER(CONCAT(LEFT(HEX(per_id), 8), "-", MID(HEX(per_id), 9, 4), "-", MID(HEX(per_id), 13, 4), "-", MID(HEX(per_id), 17, 4), "-", RIGHT(HEX(per_id), 12))) AS id, per_nombres, per_apellidos, per_np, rango.ran_nombre, per_base, guardia.gu_nombre, est.et_nombre, per_diasEco, per_vacaciones, estados.est_nombre AS est_id_per FROM personal LEFT JOIN rango ON personal.ran_id_per = rango.ran_id LEFT JOIN guardia ON personal.gu_id_per = guardia.gu_id LEFT JOIN estaciones est ON guardia.et_id_gu = est.et_id LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE gu_id_per = UNHEX(REPLACE(?, "-", "")) ORDER BY gu_nombre ASC;',
         [id]
       )
 
@@ -128,7 +128,7 @@ export class PersonnelModel {
   static async updateRankById({ rango, id }) {
     try {
       await connection.query(
-        'UPDATE personal SET ran_id_per = UUID_TO_BIN(?) WHERE per_id = UUID_TO_BIN(?);',
+        'UPDATE personal SET ran_id_per = UNHEX(REPLACE(?, "-", "")) WHERE per_id = UNHEX(REPLACE(?, "-", ""));',
         [rango, id]
       )
     } catch (error) {
@@ -140,7 +140,7 @@ export class PersonnelModel {
   static async updateGuardById({ guardia, id }) {
     try {
       await connection.query(
-        'UPDATE personal SET gu_id_per = UUID_TO_BIN(?) WHERE per_id = UUID_TO_BIN(?);',
+        'UPDATE personal SET gu_id_per = UNHEX(REPLACE(?, "-", "")) WHERE per_id = UNHEX(REPLACE(?, "-", ""));',
         [guardia, id]
       )
     } catch (error) {

@@ -26,10 +26,10 @@ DELETE http://localhost:1234/api/personnel/delete/7290227a-d184-11ef-83bf-772d7d
 GET http://localhost:1234/api/personnel
 
 ### Recuperar a todo el personal vinculados a un rango
-GET http://localhost:1234/api/personnel/rank/5a849477-fb04-11ef-b9d1-a2cc1a1d4502
+GET http://localhost:1234/api/personnel/rank/5ac284c2-9477-c3bb-0411-c3afc2b9c391
 
 ### Recuperar a todo el personal vinculados a una guardia
-GET http://localhost:1234/api/personnel/guard/9e7be1cc-fb04-11ef-b9d1-a2cc1a1d4502
+GET http://localhost:1234/api/personnel/guard/c29e7bc3-a1c3-8cc3-bb04-11c3afc2b9c3
 
 ### Actualizar un personal por rango
 PATCH http://localhost:1234/api/personnel/rank/bd1aa3fb-fd2b-11ef-a43b-4955ce09c2b0
@@ -46,6 +46,3 @@ Content-Type: application/json
 {
   "estado": "a52e31fe-faea-11ef-b9d1-a2cc1a1d4502"
 }
-
-### Recuperar todo el personal de una guardia en concreto
-GET http://localhost:1234/api/personnel/859ea494-cd47-11ef-8762-48b2a523c160

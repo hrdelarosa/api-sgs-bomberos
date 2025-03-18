@@ -4,7 +4,7 @@ export class TypeModel {
   static async create({ nombre }) {
     try {
       await connection.query(
-        `INSERT INTO tipounidad (tu_id, tu_nombre, est_id_tu) VALUES(UUID_TO_BIN(UUID()), ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
+        `INSERT INTO tipounidad (tu_id, tu_nombre, est_id_tu) VALUES(UNHEX(REPLACE(UUID(), '-', '')), ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
         [nombre]
       )
     } catch (error) {
@@ -30,7 +30,7 @@ export class TypeModel {
   static async updateStatusById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE tipounidad SET est_id_tu = UUID_TO_BIN(?) WHERE tu_id = UUID_TO_BIN(?);',
+        'UPDATE tipounidad SET est_id_tu = UNHEX(REPLACE(?, "-", "")) WHERE tu_id = UNHEX(REPLACE(?, "-", ""));',
         [estado, id]
       )
     } catch (error) {
@@ -42,7 +42,7 @@ export class TypeModel {
   static async findTypeById({ id }) {
     try {
       const [type] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_tu FROM tipounidad INNER JOIN estados ON tipounidad.est_id_tu = estados.est_id WHERE tu_id = UUID_TO_BIN(?);',
+        'SELECT estados.est_nombre AS est_id_tu FROM tipounidad INNER JOIN estados ON tipounidad.est_id_tu = estados.est_id WHERE tu_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -56,7 +56,7 @@ export class TypeModel {
   static async delete({ id }) {
     try {
       await connection.query(
-        'DELETE FROM tipounidad WHERE tu_id = UUID_TO_BIN(?);',
+        'DELETE FROM tipounidad WHERE tu_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
     } catch (error) {
@@ -68,7 +68,7 @@ export class TypeModel {
   static async typeRelatedUnits({ id }) {
     try {
       const [countUnits] = await connection.query(
-        'SELECT COUNT(*) as count FROM unidades WHERE tu_id_uni = UUID_TO_BIN(?);',
+        'SELECT COUNT(*) as count FROM unidades WHERE tu_id_uni = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -85,7 +85,7 @@ export class TypeModel {
   static async getTypes() {
     try {
       const [types] = await connection.query(
-        'SELECT BIN_TO_UUID(tu_id) AS id, tu_nombre, estados.est_nombre AS est_id_tu FROM tipounidad INNER JOIN estados ON tipounidad.est_id_tu = estados.est_id;'
+        'SELECT LOWER(CONCAT(LEFT(HEX(tu_id), 8), "-", MID(HEX(tu_id), 9, 4), "-", MID(HEX(tu_id), 13, 4), "-", MID(HEX(tu_id), 17, 4), "-", RIGHT(HEX(tu_id), 12))) AS id, tu_nombre, estados.est_nombre AS est_id_tu FROM tipounidad INNER JOIN estados ON tipounidad.est_id_tu = estados.est_id;'
       )
 
       return types

@@ -101,7 +101,7 @@ export class ServicesController {
 
       res
         .status(200)
-        .json({ message: 'Servicios obtenidos correctamente', service })
+        .json({ message: 'Servicio obtenido correctamente', service })
     } catch (error) {
       console.error('Error en el controlador de obtener el servicio:', error)
       res.status(error.statusCode || 400).json({ message: error.message })

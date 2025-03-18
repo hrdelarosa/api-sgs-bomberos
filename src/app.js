@@ -57,7 +57,7 @@ export const createApp = ({
   app.use('/api/users', createUsersRouter({ usersModel }))
   app.use('/api/services', createServicesRouter({ servicesModel }))
   app.use(
-    '/api/services/states',
+    '/api/states/services',
     createStatesServicesRouter({ statesServicesModel })
   )
   app.use('/api/stations', createStationsRouter({ stationsModel }))

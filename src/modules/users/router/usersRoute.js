@@ -23,6 +23,7 @@ export const createUsersRouter = ({ usersModel }) => {
   )
   usersRouter.delete('/delete/:id', usersController.deleteUser)
   usersRouter.get('/', usersController.getUsers)
+  usersRouter.get('/:id', usersController.getUserById)
 
   return usersRouter
 }

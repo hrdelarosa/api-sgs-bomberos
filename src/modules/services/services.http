@@ -3,7 +3,7 @@ POST http://localhost:1234/api/services/create
 Content-Type: application/json
 
 {
-  "usuario": "71c4456b-fb17-11ef-b9d1-a2cc1a1d4502",
+  "usuario": "71c38445-6bc3-bb17-11c3-afc2b9c391c2",
   "nombre": "Alejandra Lopez", 
   "telefono": "9211734040", 
   "salida": "02:10", 
@@ -15,14 +15,14 @@ Content-Type: application/json
   "otro": "", 
   "observaciones": "Se talo un arbol de roble que estaba recargado sobre una barda",
   "unidades": [
-    "3f92eeb2-faf1-11ef-b9d1-a2cc1a1d4502",
-    "3f92f488-faf1-11ef-b9d1-a2cc1a1d4502"
+    "3fc292c3-aec2-b2c3-bac3-b111c3afc2b9",
+    "3fc292c3-b335-c3ba-c3b1-11c3afc2b9c3"
   ],
   "personal": [
-    "1d230028-fb06-11ef-b9d1-a2cc1a1d4502",
-    "1d23287a-fb06-11ef-b9d1-a2cc1a1d4502",
-    "1d2329e3-fb06-11ef-b9d1-a2cc1a1d4502",
-    "1d232b45-fb06-11ef-b9d1-a2cc1a1d4502"
+    "1d2316c2-92c3-bb06-11c3-afc2b9c391c2",
+    "1d233111-c3bb-0611-c3af-c2b9c391c2a2",
+    "1d2326c3-b6c3-bb06-11c3-afc2b9c391c2",
+    "1d2346c2-a5c3-bb06-11c3-afc2b9c391c2"
   ],
   "incendio": {
     "inmueble": "",

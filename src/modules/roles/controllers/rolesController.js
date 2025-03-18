@@ -34,6 +34,19 @@ export class RolesController {
     }
   }
 
+  deleteRole = async (req, res) => {
+    try {
+      const { id } = req.params
+
+      await this.rolesService.deleteRole({ id })
+
+      res.status(200).json({ message: 'rol eliminado correctamente' })
+    } catch (error) {
+      console.error('Error en el controlador de eliminar el rol:', error)
+      res.status(error.statusCode || 400).json({ message: error.message })
+    }
+  }
+
   getRoles = async (req, res) => {
     try {
       const roles = await this.rolesService.getRoles()

@@ -31,6 +31,29 @@ export class RolesService {
     }
   }
 
+  deleteRole = async ({ id }) => {
+    try {
+      const roleExists = await this.rolesModel.findRoleById({ id })
+
+      if (roleExists === null) customError('El rol no existe', 404)
+      if (roleExists.est_id_rol === 'inactivo')
+        customError('El rol ya esta inactivo', 409)
+
+      const countUsers = await this.rolesModel.roleRelatedUsers({ id })
+
+      if (countUsers > 0)
+        customError(
+          'No se puede eliminar el rol porque tiene usuarios relacionados',
+          409
+        )
+
+      await this.rolesModel.delete({ id })
+    } catch (error) {
+      console.error('Error en el servicio de eliminar el rol:', error)
+      throw error
+    }
+  }
+
   getRoles = async () => {
     try {
       const roles = await this.rolesModel.getRoles()

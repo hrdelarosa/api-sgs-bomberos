@@ -12,11 +12,9 @@ export class UsersController {
 
       await this.usersService.changeUserState({ id, estado })
 
-      res
-        .status(200)
-        .json({
-          message: 'Estado del usuario ha sido actualizado correctamente',
-        })
+      res.status(200).json({
+        message: 'Estado del usuario ha sido actualizado correctamente',
+      })
     } catch (error) {
       console.error(
         'Error en el controlador de actualizar el estado del usuario:',
@@ -67,6 +65,21 @@ export class UsersController {
         .json({ message: 'Usuarios obtenidos correctamente', users })
     } catch (error) {
       console.error('Error en el controlador de obtener los usuarios:', error)
+      res.status(error.statusCode || 400).json({ message: error.message })
+    }
+  }
+
+  getUserById = async (req, res) => {
+    try {
+      const { id } = req.params
+      const user = await this.usersService.getUserById({ id })
+
+      res.status(200).json({ message: 'Usuairo obtenido correctamente', user })
+    } catch (error) {
+      console.error(
+        'Error en el controlador de obtener el usuario por el id:',
+        error
+      )
       res.status(error.statusCode || 400).json({ message: error.message })
     }
   }

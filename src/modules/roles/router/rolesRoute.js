@@ -18,6 +18,7 @@ export const createRolesRouter = ({ rolesModel }) => {
     validateSchema(rolesUpdateSchema),
     rolesController.changeRoleStatus
   )
+  rolesRouter.delete('/delete/:id', rolesController.deleteRole)
   rolesRouter.get('/', rolesController.getRoles)
 
   return rolesRouter

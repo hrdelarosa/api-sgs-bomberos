@@ -11,7 +11,7 @@ export class AuthModel {
 
     try {
       await connection.query(
-        `INSERT INTO usuarios (us_id, us_nombres, us_apellidos, us_correo, us_contraseña, rol_id_us, est_id_us, us_tokenVerificacion, us_tokenVerificacionExpiracion) VALUES (UUID_TO_BIN(UUID()), ?, ?, ?, ?, (SELECT rol_id FROM roles WHERE rol_nombre = 'usuario' LIMIT 1), (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1), ?, ?);`,
+        `INSERT INTO usuarios (us_id, us_nombres, us_apellidos, us_correo, us_contraseña, rol_id_us, est_id_us, us_tokenVerificacion, us_tokenVerificacionExpiracion) VALUES (UNHEX(REPLACE(UUID(), '-', '')), ?, ?, ?, ?, (SELECT rol_id FROM roles WHERE rol_nombre = 'usuario' LIMIT 1), (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1), ?, ?);`,
         [
           nombres,
           apellidos,
@@ -46,7 +46,7 @@ export class AuthModel {
   static async findUserById({ id }) {
     try {
       const [usuario] = await connection.query(
-        'SELECT BIN_TO_UUID(us_id) AS id, us_nombres, us_apellidos, us_correo, roles.rol_nombre AS rol_id_us, estados.est_nombre AS est_id_us, us_verificado, us_creado, us_actualizacion FROM usuarios INNER JOIN roles ON usuarios.rol_id_us = roles.rol_id INNER JOIN estados ON usuarios.est_id_us = estados.est_id  WHERE us_id = UUID_TO_BIN(?);',
+        'SELECT LOWER(CONCAT(LEFT(HEX(us_id), 8), "-", MID(HEX(us_id), 9, 4), "-", MID(HEX(us_id), 13, 4), "-", MID(HEX(us_id), 17, 4), "-", RIGHT(HEX(us_id), 12))) AS id, us_nombres, us_apellidos, us_correo, roles.rol_nombre AS rol_id_us, estados.est_nombre AS est_id_us, us_verificado, us_creado, us_actualizacion FROM usuarios INNER JOIN roles ON usuarios.rol_id_us = roles.rol_id INNER JOIN estados ON usuarios.est_id_us = estados.est_id  WHERE us_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -60,7 +60,7 @@ export class AuthModel {
   static async getProfileById({ id }) {
     try {
       const [profile] = await connection.query(
-        'SELECT BIN_TO_UUID(us_id) as id, us_nombres, us_apellidos, us_correo, roles.rol_nombre AS rol_id_us, estados.est_nombre AS est_id_us, us_creado, us_actualizacion, us_verificado, COUNT(ser_id) as servicios_creados FROM usuarios JOIN roles ON usuarios.rol_id_us = roles.rol_id JOIN estados ON usuarios.est_id_us = estados.est_id LEFT JOIN servicio ON usuarios.us_id = servicio.us_id_ser WHERE us_id = UUID_TO_BIN(?) GROUP BY us_id, us_nombres, us_apellidos, us_correo, roles.rol_nombre, estados.est_nombre, us_creado, us_actualizacion, us_verificado;',
+        'SELECT LOWER(CONCAT(LEFT(HEX(us_id), 8), "-", MID(HEX(us_id), 9, 4), "-", MID(HEX(us_id), 13, 4), "-", MID(HEX(us_id), 17, 4), "-", RIGHT(HEX(us_id), 12))) as id, us_nombres, us_apellidos, us_correo, roles.rol_nombre AS rol_id_us, estados.est_nombre AS est_id_us, us_creado, us_actualizacion, us_verificado, COUNT(ser_id) as servicios_creados FROM usuarios JOIN roles ON usuarios.rol_id_us = roles.rol_id JOIN estados ON usuarios.est_id_us = estados.est_id LEFT JOIN servicio ON usuarios.us_id = servicio.us_id_ser WHERE us_id = UNHEX(REPLACE(?, "-", "")) GROUP BY us_id, us_nombres, us_apellidos, us_correo, roles.rol_nombre, estados.est_nombre, us_creado, us_actualizacion, us_verificado;',
         [id]
       )
 

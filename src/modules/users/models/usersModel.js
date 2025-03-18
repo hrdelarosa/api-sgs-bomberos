@@ -4,7 +4,7 @@ export class UsersModel {
   static async updateStateById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE usuarios SET est_id_us = UUID_TO_BIN(?) WHERE us_id = UUID_TO_BIN(?);',
+        'UPDATE usuarios SET est_id_us = UNHEX(REPLACE(?, "-", "")) WHERE us_id = UNHEX(REPLACE(?, "-", ""));',
         [estado, id]
       )
     } catch (error) {
@@ -16,7 +16,7 @@ export class UsersModel {
   static async updateRoleById({ rol, id }) {
     try {
       await connection.query(
-        'UPDATE usuarios SET rol_id_us = UUID_TO_BIN(?) WHERE us_id = UUID_TO_BIN(?);',
+        'UPDATE usuarios SET rol_id_us = UNHEX(REPLACE(?, "-", "")) WHERE us_id = UNHEX(REPLACE(?, "-", ""));',
         [rol, id]
       )
     } catch (error) {
@@ -28,7 +28,7 @@ export class UsersModel {
   static async findUserById({ id }) {
     try {
       const [user] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_us FROM usuarios INNER JOIN estados ON usuarios.est_id_us = estados.est_id WHERE us_id = UUID_TO_BIN(?);',
+        'SELECT estados.est_nombre AS est_id_us FROM usuarios INNER JOIN estados ON usuarios.est_id_us = estados.est_id WHERE us_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -42,7 +42,7 @@ export class UsersModel {
   static async delete({ id }) {
     try {
       await connection.query(
-        'DELETE FROM usuarios WHERE us_id = UUID_TO_BIN(?);',
+        'DELETE FROM usuarios WHERE us_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
     } catch (error) {
@@ -54,7 +54,7 @@ export class UsersModel {
   static async userRelatedService({ id }) {
     try {
       const [countService] = await connection.query(
-        'SELECT COUNT(*) as count FROM servicio WHERE us_id_ser = UUID_TO_BIN(?);',
+        'SELECT COUNT(*) as count FROM servicio WHERE us_id_ser = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -73,7 +73,7 @@ export class UsersModel {
   static async getUsers() {
     try {
       const [users] = await connection.query(
-        'SELECT BIN_TO_UUID(us_id) AS id, us_nombres, us_apellidos, us_correo, roles.rol_nombre AS rol_id_us, estados.est_nombre AS est_id_us, us_verificado, us_creado, us_actualizacion FROM usuarios INNER JOIN roles ON usuarios.rol_id_us = roles.rol_id INNER JOIN estados ON usuarios.est_id_us = estados.est_id;'
+        'SELECT LOWER(CONCAT(LEFT(HEX(us_id), 8), "-", MID(HEX(us_id), 9, 4), "-", MID(HEX(us_id), 13, 4), "-", MID(HEX(us_id), 17, 4), "-", RIGHT(HEX(us_id), 12))) AS id, us_nombres, us_apellidos, us_correo, roles.rol_nombre AS rol_id_us, estados.est_nombre AS est_id_us, us_verificado, us_creado, us_actualizacion FROM usuarios INNER JOIN roles ON usuarios.rol_id_us = roles.rol_id INNER JOIN estados ON usuarios.est_id_us = estados.est_id;'
       )
 
       return users

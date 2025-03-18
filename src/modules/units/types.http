@@ -3,19 +3,19 @@ POST http://localhost:1234/api/types/create
 Content-Type: application/json
 
 {
-  "nombre": "camion"
+  "nombre": "motocicleta"
 }
 
 ### Actualizar una unidad
-PATCH http://localhost:1234/api/types/state/bd1aa3fb-fd2b-11ef-a43b-4955ce09c2b0
+PATCH http://localhost:1234/api/types/state/791cc3aa-6cc3-bd2c-11c3-afc2a43b4955
 Content-Type: application/json
 
 {
-  "estado": "a52e31fe-faea-11ef-b9d1-a2cc1a1d4502"
+  "estado": "c2a52e31-c3be-c3ba-c3aa-11c3afc2b9c3"
 }
 
 ### Eliminar la unidad guardada
-DELETE http://localhost:1234/api/types/delete/9b82e6a4-faeb-11ef-b9d1-a2cc1a1d4502
+DELETE http://localhost:1234/api/types/delete/791cc3aa-6cc3-bd2c-11c3-afc2a43b4955
 
 ### Recuperar todas las types guardadas
 GET http://localhost:1234/api/types

@@ -4,7 +4,7 @@ export class StatesServicesModel {
   static async getStatesService() {
     try {
       const [states] = await connection.query(
-        'SELECT BIN_TO_UUID(estser_id) AS id, estser_nombre, estser_descripcion FROM estadosservicio;'
+        'SELECT LOWER(CONCAT(LEFT(HEX(estser_id), 8), "-", MID(HEX(estser_id), 9, 4), "-", MID(HEX(estser_id), 13, 4), "-", MID(HEX(estser_id), 17, 4), "-", RIGHT(HEX(estser_id), 12))) AS id, estser_nombre, estser_descripcion FROM estadosservicio;'
       )
 
       return states

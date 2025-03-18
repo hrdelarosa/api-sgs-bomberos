@@ -4,7 +4,7 @@ export class RanksModel {
   static async create({ nombre }) {
     try {
       await connection.query(
-        `INSERT INTO rango (ran_id, ran_nombre, est_id_ran) VALUES(UUID_TO_BIN(UUID()), ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
+        `INSERT INTO rango (ran_id, ran_nombre, est_id_ran) VALUES (UNHEX(REPLACE(UUID(), '-', '')), ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
         [nombre]
       )
     } catch (error) {
@@ -16,7 +16,7 @@ export class RanksModel {
   static async findRankByName({ nombre }) {
     try {
       const [rank] = await connection.query(
-        'SELECT BIN_TO_UUID(ran_id) AS id, ran_nombre, BIN_TO_UUID(est_id_ran) AS est_id_ran FROM rango WHERE ran_nombre = ?;',
+        'SELECT LOWER(CONCAT(LEFT(HEX(ran_id), 8), "-", MID(HEX(ran_id), 9, 4), "-", MID(HEX(ran_id), 13, 4), "-", MID(HEX(ran_id), 17, 4), "-", RIGHT(HEX(ran_id), 12))) AS id, ran_nombre, LOWER(CONCAT(LEFT(HEX(est_id_ran), 8), "-", MID(HEX(est_id_ran), 9, 4), "-", MID(HEX(est_id_ran), 13, 4), "-", MID(HEX(est_id_ran), 17, 4), "-", RIGHT(HEX(est_id_ran), 12))) AS est_id_ran FROM rango WHERE ran_nombre = ?;',
         [nombre]
       )
 
@@ -30,7 +30,7 @@ export class RanksModel {
   static async updateStateById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE rango SET est_id_ran = UUID_TO_BIN(?) WHERE ran_id = UUID_TO_BIN(?);',
+        'UPDATE rango SET est_id_ran = UNHEX(REPLACE(?, "-", "")) WHERE ran_id = UNHEX(REPLACE(?, "-", ""));',
         [estado, id]
       )
     } catch (error) {
@@ -42,7 +42,7 @@ export class RanksModel {
   static async findRankById({ id }) {
     try {
       const [rank] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_ran FROM rango INNER JOIN estados ON rango.est_id_ran = estados.est_id WHERE ran_id = UUID_TO_BIN(?);',
+        'SELECT estados.est_nombre AS est_id_ran FROM rango INNER JOIN estados ON rango.est_id_ran = estados.est_id WHERE ran_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
 
@@ -56,7 +56,7 @@ export class RanksModel {
   static async delete({ id }) {
     try {
       await connection.query(
-        'DELETE FROM rango WHERE ran_id = UUID_TO_BIN(?);',
+        'DELETE FROM rango WHERE ran_id = UNHEX(REPLACE(?, "-", ""));',
         [id]
       )
     } catch (error) {
@@ -68,7 +68,7 @@ export class RanksModel {
   static async getRanks() {
     try {
       const [ranks] = await connection.query(
-        'SELECT BIN_TO_UUID(ran_id) AS id, ran_nombre, estados.est_nombre AS est_id_ran FROM rango INNER JOIN estados ON rango.est_id_ran = estados.est_id;'
+        'SELECT LOWER(CONCAT(LEFT(HEX(ran_id), 8), "-", MID(HEX(ran_id), 9, 4), "-", MID(HEX(ran_id), 13, 4), "-", MID(HEX(ran_id), 17, 4), "-", RIGHT(HEX(ran_id), 12))) AS id, ran_nombre, estados.est_nombre AS est_id_ran FROM rango INNER JOIN estados ON rango.est_id_ran = estados.est_id;'
       )
 
       return ranks
