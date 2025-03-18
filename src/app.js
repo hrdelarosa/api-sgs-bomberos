@@ -1,16 +1,9 @@
 import './lib/loadEnv.js'
+import './utils/cronJobs.js'
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser'
-// import { createAuthRouter } from './router/auth.route.js'
-// import { createRolesRouter } from './router/roles.route.js'
-// import { createEstadosRouter } from './router/estados.route.js'
-// import { createUnidadesRouter } from './router/unidades.route.js'
-// import { createPersonalRouter } from './router/personal.route.js'
-// import { createGuardiasRouter } from './router/guardias.route.js'
-// import { createRangosRouter } from './router/rangos.route.js'
-// import { createUsuariosRouter } from './router/usuarios.route.js'
-// import { createServiciosRouter } from './router/servicios.route.js'
-// import { createEstacionesRouter } from './router/estaciones.router.js'
+import { corsMiddleware } from './middleware/cors.js'
+
 import { createAuthRouter } from './modules/auth/routes/authRoute.js'
 import { createRolesRouter } from './modules/roles/router/rolesRoute.js'
 import { createStatesRouter } from './modules/states/router/statesRoute.js'
@@ -23,7 +16,6 @@ import { createUsersRouter } from './modules/users/router/usersRoute.js'
 import { createServicesRouter } from './modules/services/router/servicesRoute.js'
 import { createStatesServicesRouter } from './modules/services/router/statesServicesRoute.js'
 import { createStationsRouter } from './modules/stations/router/stationsRoute.js'
-import { corsMiddleware } from './middleware/cors.js'
 
 export const createApp = ({
   authModel,
