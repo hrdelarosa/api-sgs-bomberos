@@ -102,7 +102,7 @@ export class ServicesModel {
   static async getServiceById({ id }) {
     try {
       const [service] = await connection.query(
-        'SELECT * FROM vista_servicios_completa WHERE id_servicio = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT * FROM vista_servicios_completa WHERE id_servicio = ?;',
         [id]
       )
 
