@@ -132,12 +132,10 @@ export class AuthController {
 
       await this.authService.requestPasswordReset({ correo })
 
-      res
-        .status(200)
-        .json({
-          message:
-            'Se ha enviado un correo con instrucciones para restablecer tu contraseña',
-        })
+      res.status(200).json({
+        message:
+          'Se ha enviado un correo con instrucciones para restablecer tu contraseña',
+      })
     } catch (error) {
       console.error(
         'Error en el controlador de solicitud de token para restablecimineto de contraseña:',
