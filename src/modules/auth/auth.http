@@ -44,6 +44,10 @@ GET http://localhost:1234/api/auth/profile/settings/f3d94723-cd4d-11ef-8762-48b2
 ### Verificar token
 GET http://localhost:1234/api/auth/verify-token
 
+### Refrescar token
+POST http://localhost:1234/api/auth/refresh-token
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
 
 ### Verificar correo
 POST http://localhost:1234/api/auth/verify-email
