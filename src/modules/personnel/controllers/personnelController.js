@@ -98,6 +98,10 @@ export class PersonnelController {
     }
   }
 
+  /*Todo: Crear una nueva ruta para extraer la información de un bombero en 
+  en especifico (id), junto con los servicios a los que estan vinculados
+  (han acudido)*/
+
   changePersonnelRank = async (req, res) => {
     try {
       const { id } = req.params
@@ -106,7 +110,7 @@ export class PersonnelController {
       await this.personnelService.changePersonnelRank({ id, rango })
 
       res.status(200).json({
-        message: 'El estado del personal ha sido actualizado correctamente',
+        message: 'El rango del personal ha sido actualizado correctamente',
       })
     } catch (error) {
       console.error(
@@ -125,7 +129,7 @@ export class PersonnelController {
       await this.personnelService.changePersonnelGuard({ id, guardia })
 
       res.status(200).json({
-        message: 'El estado del personal ha sido actualizado correctamente',
+        message: 'La guardia del personal ha sido actualizado correctamente',
       })
     } catch (error) {
       console.error(
