@@ -32,7 +32,7 @@ export class AuthModel {
   static async findUserByEmail({ correo }) {
     try {
       const [usuario] = await connection.query(
-        'SELECT BIN_TO_UUID(us_id) AS id, us_nombres, us_apellidos, us_correo, us_contraseña, us_verificado, estados.est_nombre AS est_id_us FROM usuarios INNER JOIN estados on usuarios.est_id_us = estados.est_id WHERE us_correo = ?;',
+        'SELECT LOWER(CONCAT(LEFT(HEX(us_id), 8), "-", MID(HEX(us_id), 9, 4), "-", MID(HEX(us_id), 13, 4), "-", MID(HEX(us_id), 17, 4), "-", RIGHT(HEX(us_id), 12))) AS id, us_nombres, us_apellidos, us_correo, us_contraseña, us_verificado, estados.est_nombre AS est_id_us FROM usuarios INNER JOIN estados on usuarios.est_id_us = estados.est_id WHERE us_correo = ?;',
         [correo]
       )
 
