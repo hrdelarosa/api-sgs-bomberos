@@ -8,5 +8,5 @@ export const ranksSchema = z.object({
 })
 
 export const updateStateSchema = z.object({
-  estado: z.string({ required_error: 'El estado es requerido' }).uuid(),
+  estado: z.number({ required_error: 'El estado es requerido' }),
 })

@@ -4,7 +4,7 @@ export class GuardsModel {
   static async create({ nombre, estacion }) {
     try {
       await connection.query(
-        'INSERT INTO guardia (gu_id, gu_nombre, et_id_gu) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO guardia (gu_nombre, et_id_gu) VALUES (?, ?);',
         [nombre, estacion]
       )
     } catch (error) {
@@ -16,7 +16,7 @@ export class GuardsModel {
   static async findGuardByName({ nombre }) {
     try {
       const [guard] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(gu_id), 8), "-", MID(HEX(gu_id), 9, 4), "-", MID(HEX(gu_id), 13, 4), "-", MID(HEX(gu_id), 17, 4), "-", RIGHT(HEX(gu_id), 12))) AS id, gu_nombre, LOWER(CONCAT(LEFT(HEX(et_id_gu), 8), "-", MID(HEX(et_id_gu), 9, 4), "-", MID(HEX(et_id_gu), 13, 4), "-", MID(HEX(et_id_gu), 17, 4), "-", RIGHT(HEX(et_id_gu), 12))) AS et_id_gu FROM guardia WHERE gu_nombre = ?;',
+        'SELECT * FROM guardia WHERE gu_nombre = ?;',
         [nombre]
       )
 
@@ -29,10 +29,7 @@ export class GuardsModel {
 
   static async delete({ id }) {
     try {
-      await connection.query(
-        'DELETE FROM guardia WHERE gu_id = UNHEX(REPLACE(?, "-", ""));',
-        [id]
-      )
+      await connection.query('DELETE FROM guardia WHERE gu_id = ?;', [id])
     } catch (error) {
       console.error('Error al eliminar la guardia por id:', error)
       throw new Error('Error al eliminar la guardia por id')
@@ -42,7 +39,7 @@ export class GuardsModel {
   static async guardsRelatedPersonnel({ id }) {
     try {
       const [countPersonnel] = await connection.query(
-        'SELECT COUNT(*) as count FROM personal WHERE gu_id_per = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT COUNT(*) as count FROM personal WHERE gu_id_per = ?;',
         [id]
       )
 
@@ -61,7 +58,7 @@ export class GuardsModel {
   static async findGuardById({ id }) {
     try {
       const [guard] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(gu_id), 8), "-", MID(HEX(gu_id), 9, 4), "-", MID(HEX(gu_id), 13, 4), "-", MID(HEX(gu_id), 17, 4), "-", RIGHT(HEX(gu_id), 12))) AS id, gu_nombre, LOWER(CONCAT(LEFT(HEX(et_id_gu), 8), "-", MID(HEX(et_id_gu), 9, 4), "-", MID(HEX(et_id_gu), 13, 4), "-", MID(HEX(et_id_gu), 17, 4), "-", RIGHT(HEX(et_id_gu), 12))) AS et_id_gu FROM guardia WHERE gu_id = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT gu_id, gu_nombre, et_id_gu, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id WHERE gu_id = ?;',
         [id]
       )
 
@@ -75,7 +72,7 @@ export class GuardsModel {
   static async getGuards() {
     try {
       const [guards] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(gu_id), 8), "-", MID(HEX(gu_id), 9, 4), "-", MID(HEX(gu_id), 13, 4), "-", MID(HEX(gu_id), 17, 4), "-", RIGHT(HEX(gu_id), 12))) AS id, gu_nombre, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id;'
+        'SELECT gu_id, gu_nombre, et_id_gu, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id;'
       )
 
       return guards
@@ -88,7 +85,7 @@ export class GuardsModel {
   static async getGuardsPerStations({ id }) {
     try {
       const [guards] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(gu_id), 8), "-", MID(HEX(gu_id), 9, 4), "-", MID(HEX(gu_id), 13, 4), "-", MID(HEX(gu_id), 17, 4), "-", RIGHT(HEX(gu_id), 12))) AS id, gu_nombre, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id WHERE et_id_gu = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT LOWER(CONCAT(LEFT(HEX(gu_id), 8), "-", MID(HEX(gu_id), 9, 4), "-", MID(HEX(gu_id), 13, 4), "-", MID(HEX(gu_id), 17, 4), "-", RIGHT(HEX(gu_id), 12))) AS id, gu_nombre, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id WHERE et_id_gu = ?;',
         [id]
       )
 

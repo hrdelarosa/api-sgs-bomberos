@@ -28,7 +28,7 @@ export class AuthService {
         contraseña,
       })
 
-      await sendVerificationEmail({ correo, token })
+      await sendVerificationEmail({ nombres, correo, token })
     } catch (error) {
       console.error('Error en el servicio de registro:', error)
       throw error
@@ -80,11 +80,17 @@ export class AuthService {
 
   verifyToken = async ({ token }) => {
     try {
+      if (!token) customError('Token no proporcionado', 401)
+
       const decoded = await verifyToken(token)
 
       if (!decoded) customError('Token inválido o expirado', 401)
 
-      return decoded
+      const user = await this.authModel.findUserById({ id: decoded.id })
+
+      if (!user) customError('Usuario no encontrado', 404)
+
+      return { decoded, user }
     } catch (error) {
       console.error('Error en el servicio de la verificación del token:', error)
       throw error

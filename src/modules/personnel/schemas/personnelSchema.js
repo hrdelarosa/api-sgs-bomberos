@@ -21,15 +21,15 @@ export const personnelSchema = z.object({
     .string({ required_error: 'El numero del personal es requerida' })
     .min(3, 'El numero del personal debe de ser mayor a 3')
     .max(8, 'El numero del personal debe de ser menor a 8'),
-  rango: z.string({ required_error: 'El rago es requerido' }).uuid(),
+  rango: z.number({ required_error: 'El rago es requerido' }),
   base: z.enum(['supernumerario', 'sindicalizado'], {
     required_error: 'La base es requerida',
   }),
-  guardia: z.string({ required_error: 'La guardia es requerido' }).uuid(),
+  guardia: z.number({ required_error: 'La guardia es requerido' }),
 })
 
 export const updateStateSchema = z.object({
-  estado: z.string({ required_error: 'El estado es requerido' }).uuid(),
+  estado: z.number({ required_error: 'El estado es requerido' }),
 })
 
 export const updateRankSchema = personnelSchema.pick({

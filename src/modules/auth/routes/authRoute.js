@@ -22,6 +22,7 @@ export const createAuthRouter = ({ authModel }) => {
   )
   authRouter.post('/login', validateSchema(loginSchema), authController.login)
   authRouter.post('/logout', authController.logout)
+  authRouter.get('/profile/:id', authController.profile)
   authRouter.get('/verify-token', authController.verifyToken)
   authRouter.post('/refresh-token', authController.refreshToken)
   authRouter.post(

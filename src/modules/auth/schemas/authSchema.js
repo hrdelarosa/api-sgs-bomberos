@@ -26,9 +26,13 @@ export const registerSchema = z
       .min(6, 'La contraseña debe de tener al menos 6 caracteres')
       .max(30, 'La contraseña no puede exceder los 30 caracteres'),
     confirmarContraseña: z
-      .string()
-      .min(6, { message: 'La contraseña debe de tener al menos 6 caracteres' })
-      .max(30, { message: 'La contraseña no puede exceder los 30 caracteres' }),
+      .string({ required_error: 'Es requerido confirmar la contraseña' })
+      .min(6, {
+        message: 'Confirmar contraseña debe de tener al menos 6 caracteres',
+      })
+      .max(30, {
+        message: 'Confirmar contraseña no puede exceder los 30 caracteres',
+      }),
   })
   .refine((data) => data.contraseña === data.confirmarContraseña, {
     message: 'Las contraseñas no coinciden',
@@ -47,9 +51,8 @@ export const loginSchema = z.object({
 export const emailVerificationSchema = z.object({
   token: z
     .string({ required_error: 'El código es requerido' })
-    .regex(/^[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}$/, {
-      message:
-        'El código debe tener el formato correcto (hexadecimal con guiones).',
+    .regex(/^\d{6}$/, {
+      message: 'El código debe ser un número de 6 dígitos.',
     }),
 })
 
@@ -65,9 +68,8 @@ export const resetPasswordSchema = z
   .object({
     token: z
       .string({ required_error: 'El código es requerido' })
-      .regex(/^[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}-[a-f0-9]{8}$/, {
-        message:
-          'El código debe tener el formato correcto (hexadecimal con guiones).',
+      .regex(/^\d{6}$/, {
+        message: 'El código debe ser un número de 6 dígitos.',
       }),
     contraseña: z
       .string({ required_error: 'La contraseña es requerida' })

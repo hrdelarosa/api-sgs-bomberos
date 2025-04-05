@@ -4,7 +4,7 @@ export class UnitsModel {
   static async create({ tipo, numero }) {
     try {
       await connection.query(
-        `INSERT INTO unidades (uni_id, tu_id_uni, uni_numero, est_id_uni) VALUES (UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE(?, '-', '')), ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
+        `INSERT INTO unidades (tu_id_uni, uni_numero, est_id_uni) VALUES (?, ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
         [tipo, numero]
       )
     } catch (error) {
@@ -30,7 +30,7 @@ export class UnitsModel {
   static async updateStatusById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE unidades SET est_id_uni = UNHEX(REPLACE(?, "-", "")) WHERE uni_id = UNHEX(REPLACE(?, "-", ""));',
+        'UPDATE unidades SET est_id_uni = ? WHERE uni_id = ?;',
         [estado, id]
       )
     } catch (error) {
@@ -42,7 +42,7 @@ export class UnitsModel {
   static async findUnitByid({ id }) {
     try {
       const [unit] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_uni FROM unidades INNER JOIN estados ON unidades.est_id_uni = estados.est_id WHERE uni_id = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT est_id_uni, estados.est_nombre FROM unidades INNER JOIN estados ON unidades.est_id_uni = estados.est_id WHERE uni_id = ?;',
         [id]
       )
 
@@ -55,10 +55,7 @@ export class UnitsModel {
 
   static async delete({ id }) {
     try {
-      await connection.query(
-        'DELETE FROM unidades WHERE uni_id = UNHEX(REPLACE(?, "-", ""));',
-        [id]
-      )
+      await connection.query('DELETE FROM unidades WHERE uni_id = ?;', [id])
     } catch (error) {
       console.error('Error al eliminar la unidad por id:', error)
       throw new Error('Error al eliminar la unidad por id')
@@ -68,7 +65,7 @@ export class UnitsModel {
   static async unitsRelatedService({ id }) {
     try {
       const countUnits = await connection.query(
-        'SELECT COUNT(*) AS count FROM servicio_unidades WHERE su_unidades_id = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT COUNT(*) AS count FROM servicio_unidades WHERE su_unidades_id = ?;',
         [id]
       )
 
@@ -87,7 +84,7 @@ export class UnitsModel {
   static async getUnits() {
     try {
       const [units] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(uni_id), 8), "-", MID(HEX(uni_id), 9, 4), "-", MID(HEX(uni_id), 13, 4), "-", MID(HEX(uni_id), 17, 4), "-", RIGHT(HEX(uni_id), 12))) AS id, tipounidad.tu_nombre AS tu_id_uni, uni_numero, estados.est_nombre AS est_id_uni FROM unidades INNER JOIN tipounidad ON unidades.tu_id_uni = tipounidad.tu_id INNER JOIN estados ON unidades.est_id_uni = estados.est_id;'
+        'SELECT uni_id, tu_id_uni, tipounidad.tu_nombre, uni_numero, est_id_uni, estados.est_nombre FROM unidades INNER JOIN tipounidad ON unidades.tu_id_uni = tipounidad.tu_id INNER JOIN estados ON unidades.est_id_uni = estados.est_id;'
       )
 
       return units

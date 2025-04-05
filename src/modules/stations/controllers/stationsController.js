@@ -49,11 +49,11 @@ export class StationsController {
 
   getStations = async (req, res) => {
     try {
-      const roles = await this.stationsService.getStations()
+      const stations = await this.stationsService.getStations()
 
       res
         .status(200)
-        .json({ message: 'Estaciones obtenidos correctamente', roles })
+        .json({ message: 'Estaciones obtenidos correctamente', stations })
     } catch (error) {
       console.error('Error en el controlador de obtener las estaciones:', error)
       res.status(error.statusCode || 400).json({ message: error.message })

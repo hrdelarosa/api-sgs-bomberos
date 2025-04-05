@@ -9,11 +9,11 @@ export const createGuardsRouter = ({ guardsModel }) => {
   const guardsController = new GuardsController({ guardsModel })
 
   guardsRouter.post(
-    '/crear',
+    '/create',
     validateSchema(guardsSchema),
     guardsController.create
   )
-  guardsRouter.delete('/eliminar/:id', guardsController.deleteGuard)
+  guardsRouter.delete('/delete/:id', guardsController.deleteGuard)
   guardsRouter.get('/', guardsController.getGuards)
   guardsRouter.get('/:id', guardsController.getGuardsPerStations)
 

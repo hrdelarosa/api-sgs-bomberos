@@ -30,7 +30,7 @@ export class StationsModel {
   static async findStationById({ id }) {
     try {
       const [station] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_et FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id WHERE et_id = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT est_id_et, estados.est_nombre FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id WHERE et_id = ?;',
         [id]
       )
 
@@ -44,7 +44,7 @@ export class StationsModel {
   static async updateStatusById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE estaciones SET est_id_et = UNHEX(REPLACE(?, "-", "")) WHERE et_id = UNHEX(REPLACE(?, "-", ""));',
+        'UPDATE estaciones SET est_id_et = ? WHERE et_id = ?;',
         [estado, id]
       )
     } catch (error) {
@@ -55,10 +55,7 @@ export class StationsModel {
 
   static async delete({ id }) {
     try {
-      await connection.query(
-        'DELETE FROM estaciones WHERE et_id = UNHEX(REPLACE(?, "-", ""));',
-        [id]
-      )
+      await connection.query('DELETE FROM estaciones WHERE et_id = ?;', [id])
     } catch (error) {
       console.error('Error al eliminar la estación por id:', error)
       throw new Error('Error al eliminar la estación por id')
@@ -68,7 +65,7 @@ export class StationsModel {
   static async estationRelatedGuard({ id }) {
     try {
       const [countUnits] = await connection.query(
-        'SELECT COUNT(*) as count FROM guardia WHERE et_id_gu = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT COUNT(*) as count FROM guardia WHERE et_id_gu = ?;',
         [id]
       )
 
@@ -87,7 +84,7 @@ export class StationsModel {
   static async getStations() {
     try {
       const [stations] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(et_id), 8), "-", MID(HEX(et_id), 9, 4), "-", MID(HEX(et_id), 13, 4), "-", MID(HEX(et_id), 17, 4), "-", RIGHT(HEX(et_id), 12))) AS id, et_nombre, et_ubicacion, estados.est_nombre AS est_id_et FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id;'
+        'SELECT et_id, et_nombre, et_ubicacion, est_id_et, estados.est_nombre FROM estaciones INNER JOIN estados ON estaciones.est_id_et = estados.est_id;'
       )
 
       return stations

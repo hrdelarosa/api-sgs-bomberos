@@ -38,7 +38,7 @@ export class StationService {
       const stationExists = await this.stationsModel.findStationById({ id })
 
       if (stationExists === null) customError('La estación no existe', 404)
-      if (stationExists.est_id_et === 'inactivo')
+      if (stationExists.est_nombre === 'inactivo')
         customError('La estación ya esta inactiva', 409)
 
       const countUnits = await this.stationsModel.estationRelatedGuard({ id })

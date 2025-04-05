@@ -4,7 +4,7 @@ export class RolesModel {
   static async create({ nombre, descripcion }) {
     try {
       await connection.query(
-        `INSERT INTO roles (rol_id, rol_nombre, rol_descripcion, est_id_rol) VALUES (UNHEX(REPLACE(UUID(), '-', '')), ?, ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
+        `INSERT INTO roles (rol_nombre, rol_descripcion, est_id_rol) VALUES (?, ?, (SELECT est_id FROM estados WHERE est_nombre = 'activo' LIMIT 1));`,
         [nombre, descripcion]
       )
     } catch (error) {
@@ -30,7 +30,7 @@ export class RolesModel {
   static async findRoleById({ id }) {
     try {
       const [role] = await connection.query(
-        'SELECT estados.est_nombre AS est_id_rol FROM roles INNER JOIN estados ON roles.est_id_rol = estados.est_id WHERE rol_id = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT est_id_rol, estados.est_nombre FROM roles INNER JOIN estados ON roles.est_id_rol = estados.est_id WHERE rol_id = ?;',
         [id]
       )
 
@@ -43,10 +43,7 @@ export class RolesModel {
 
   static async delete({ id }) {
     try {
-      await connection.query(
-        'DELETE FROM roles WHERE rol_id = UNHEX(REPLACE(?, "-", ""));',
-        [id]
-      )
+      await connection.query('DELETE FROM roles WHERE rol_id = ?;', [id])
     } catch (error) {
       console.error('Error al eliminar el rol por id:', error)
       throw new Error('Error al eliminar el rol por id')
@@ -56,7 +53,7 @@ export class RolesModel {
   static async roleRelatedUsers({ id }) {
     try {
       const countUnits = await connection.query(
-        'SELECT COUNT(*) AS count FROM usuarios WHERE rol_id_us = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT COUNT(*) AS count FROM usuarios WHERE rol_id_us = ?;',
         [id]
       )
 
@@ -75,7 +72,7 @@ export class RolesModel {
   static async updateStatusById({ estado, id }) {
     try {
       await connection.query(
-        'UPDATE roles SET est_id_rol = UNHEX(REPLACE(?, "-", "")) WHERE rol_id = UNHEX(REPLACE(?, "-", ""));',
+        'UPDATE roles SET est_id_rol = ? WHERE rol_id = ?;',
         [estado, id]
       )
     } catch (error) {
@@ -87,7 +84,7 @@ export class RolesModel {
   static async getRoles() {
     try {
       const [roles] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(rol_id), 8), "-", MID(HEX(rol_id), 9, 4), "-", MID(HEX(rol_id), 13, 4), "-", MID(HEX(rol_id), 17, 4), "-", RIGHT(HEX(rol_id), 12))) AS id, rol_nombre, rol_descripcion, estados.est_nombre AS est_id_rol FROM roles INNER JOIN estados ON roles.est_id_rol = estados.est_id;'
+        'SELECT rol_id, rol_nombre, rol_descripcion, est_id_rol, estados.est_nombre FROM roles INNER JOIN estados ON roles.est_id_rol = estados.est_id;'
       )
 
       return roles

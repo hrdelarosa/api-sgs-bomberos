@@ -12,5 +12,5 @@ export const stationsSchema = z.object({
 })
 
 export const stationsUpdateSchema = z.object({
-  estado: z.string({ required_error: 'El estado es requerido' }).uuid(),
+  estado: z.number({ required_error: 'El estado es requerido' }),
 })

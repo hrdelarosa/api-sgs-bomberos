@@ -49,9 +49,9 @@ export class TypesController {
 
   getTypes = async (req, res) => {
     try {
-      const units = await this.typesService.getTypes()
+      const types = await this.typesService.getTypes()
 
-      res.status(200).json({ message: 'Tipo obtenidos correctamente', units })
+      res.status(200).json({ message: 'Tipo obtenidos correctamente', types })
     } catch (error) {
       console.error('Error en el controlador de obtener los tipos:', error)
       res.status(error.statusCode || 400).json({ message: error.message })

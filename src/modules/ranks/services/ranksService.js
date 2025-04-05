@@ -36,7 +36,7 @@ export class RanksService {
       const rankExists = await this.ranksModel.findRankById({ id })
 
       if (rankExists === null) customError('El rango no existe', 404)
-      if (rankExists.est_id_ran === 'inactivo')
+      if (rankExists.est_nombre === 'inactivo')
         customError('El rango ya esta inactivo', 409)
 
       await this.ranksModel.delete({ id })

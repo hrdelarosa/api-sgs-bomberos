@@ -20,7 +20,7 @@ export class ServicesModel {
 
     try {
       await connection.query(
-        `INSERT INTO servicio (ser_id, us_id_ser, ser_creado, ser_nombre, ser_telefono, ser_salida, ser_llegada, ser_control, ser_base, ser_incidente, ser_ubicacion, ser_folio, ser_otro, ser_observaciones, estser_id_ser) VALUES (UNHEX(REPLACE(?, "-", "")), UNHEX(REPLACE(?, "-", "")), NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT estser_id FROM estadosservicio WHERE estser_nombre = 'nuevo' LIMIT 1));`,
+        `INSERT INTO servicio (ser_id, us_id_ser, ser_creado, ser_nombre, ser_telefono, ser_salida, ser_llegada, ser_control, ser_base, ser_incidente, ser_ubicacion, ser_folio, ser_otro, ser_observaciones, estser_id_ser) VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT estser_id FROM estadosservicio WHERE estser_nombre = 'nuevo' LIMIT 1));`,
         [
           id,
           usuario,
@@ -61,7 +61,7 @@ export class ServicesModel {
   static async findServiceById({ id }) {
     try {
       const [service] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(ser_id), 8), "-", MID(HEX(ser_id), 9, 4), "-", MID(HEX(ser_id), 13, 4), "-", MID(HEX(ser_id), 17, 4), "-", RIGHT(HEX(ser_id), 12))) as id, ser_creado, estadosservicio.estser_nombre AS estser_id_ser FROM servicio INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id WHERE ser_id = UNHEX(REPLACE(?, "-", ""));',
+        'SELECT ser_id, ser_creado, estser_id_ser, estadosservicio.estser_nombre FROM servicio INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id WHERE ser_id = ?;',
         [id]
       )
 
@@ -75,7 +75,7 @@ export class ServicesModel {
   static async getServices({ limit, offset }) {
     try {
       const [service] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(ser_id), 8), "-", MID(HEX(ser_id), 9, 4), "-", MID(HEX(ser_id), 13, 4), "-", MID(HEX(ser_id), 17, 4), "-", RIGHT(HEX(ser_id), 12))) AS id, usuarios.us_nombres, ser_creado, ser_nombre, ser_telefono, ser_incidente, ser_ubicacion, ser_folio, ser_observaciones, estadosservicio.estser_nombre AS estser_id_ser FROM servicio INNER JOIN usuarios ON servicio.us_id_ser = usuarios.us_id INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id ORDER BY ser_creado DESC LIMIT ? OFFSET ?;',
+        'SELECT ser_id, usuarios.us_nombres, ser_creado, ser_nombre, ser_telefono, ser_incidente, ser_ubicacion, ser_folio, ser_observaciones, estser_id_ser, estadosservicio.estser_nombre FROM servicio INNER JOIN usuarios ON servicio.us_id_ser = usuarios.us_id INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id ORDER BY ser_creado DESC LIMIT ? OFFSET ?;',
         [limit, offset]
       )
 
@@ -116,7 +116,7 @@ export class ServicesModel {
   static async getServiceByCreator({ id, limit }) {
     try {
       const [service] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(ser_id), 8), "-", MID(HEX(ser_id), 9, 4), "-", MID(HEX(ser_id), 13, 4), "-", MID(HEX(ser_id), 17, 4), "-", RIGHT(HEX(ser_id), 12))) AS id, usuarios.us_nombres, ser_creado, ser_nombre, ser_telefono, ser_incidente, ser_ubicacion, ser_folio, ser_observaciones, estadosservicio.estser_nombre AS estser_id_ser FROM servicio INNER JOIN usuarios ON servicio.us_id_ser = usuarios.us_id INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id WHERE us_id_ser = UNHEX(REPLACE(?, "-", "")) ORDER BY ser_creado DESC LIMIT ?;',
+        'SELECT ser_id, us_id_ser, usuarios.us_nombres, ser_creado, ser_nombre, ser_telefono, ser_incidente, ser_ubicacion, ser_folio, ser_observaciones, estser_id_ser, estadosservicio.estser_nombre FROM servicio INNER JOIN usuarios ON servicio.us_id_ser = usuarios.us_id INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id WHERE us_id_ser = ? ORDER BY ser_creado DESC LIMIT ?;',
         [id, limit]
       )
 
@@ -130,7 +130,7 @@ export class ServicesModel {
   static async insertServicePersonnel({ id, persona }) {
     try {
       await connection.query(
-        'INSERT INTO servicio_personal (sp_servicio_id, sp_personal_id) VALUES (UNHEX(REPLACE(?, "-", "")), UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO servicio_personal (sp_servicio_id, sp_personal_id) VALUES (?, ?);',
         [id, persona]
       )
     } catch (error) {
@@ -142,7 +142,7 @@ export class ServicesModel {
   static async insertServiceUnits({ id, unidad }) {
     try {
       await connection.query(
-        'INSERT INTO servicio_unidades (su_servicio_id, su_unidades_id) VALUES (UNHEX(REPLACE(?, "-", "")), UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO servicio_unidades (su_servicio_id, su_unidades_id) VALUES (?, ?);',
         [id, unidad]
       )
     } catch (error) {
@@ -156,7 +156,7 @@ export class ServicesModel {
       const { inmueble, inmEspecifique, otro, otrEspecifique } = incendio
 
       await connection.query(
-        'INSERT INTO incendio (inc_id, inc_inmueble, inc_inmEspecifique, inc_otro, inc_otrEspecifique, ser_id_inc) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, ?, ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO incendio (inc_inmueble, inc_inmEspecifique, inc_otro, inc_otrEspecifique, ser_id_inc) VALUES (?, ?, ?, ?, ?);',
         [inmueble, inmEspecifique, otro, otrEspecifique, id]
       )
     } catch (error) {
@@ -181,7 +181,7 @@ export class ServicesModel {
       } = fugaDerrame
 
       await connection.query(
-        'INSERT INTO fugaderrame (fd_id, fd_fuga, fd_capacidad, fd_especifique, fd_empresa, fd_noGuia, fd_material, fd_observaciones, ser_id_fd) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, ?, ?, ?, ?, ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO fugaderrame (fd_fuga, fd_capacidad, fd_especifique, fd_empresa, fd_noGuia, fd_material, fd_observaciones, ser_id_fd) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
         [
           fuga,
           capacidad,
@@ -209,7 +209,7 @@ export class ServicesModel {
       const { abeja, especifique, observaciones } = abejas
 
       await connection.query(
-        'INSERT INTO abejas (ab_id, ab_abejas, ab_especifique, ab_observaciones, ser_id_ab) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO abejas (ab_abejas, ab_especifique, ab_observaciones, ser_id_ab) VALUES (?, ?, ?, ?);',
         [abeja, especifique, observaciones, id]
       )
     } catch (error) {
@@ -233,7 +233,7 @@ export class ServicesModel {
       } = rescate
 
       await connection.query(
-        'INSERT INTO rescate (res_id, res_heridos, res_cadaveres, res_ambulancia, res_equipo, res_noPersonal, res_especifique, ser_id_res) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, ?, ?, ?, ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO rescate (res_heridos, res_cadaveres, res_ambulancia, res_equipo, res_noPersonal, res_especifique, ser_id_res) VALUES (?, ?, ?, ?, ?, ?, ?);',
         [heridos, cadaveres, ambulancia, equipo, noPersonal, especifique, id]
       )
     } catch (error) {
@@ -250,7 +250,7 @@ export class ServicesModel {
       const { material, especifique, heridos, muertos, ambulancia } = daños
 
       await connection.query(
-        'INSERT INTO daños (da_id, da_material, da_especifique, da_heridos, da_muertos, da_ambulancia, ser_id_da) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, ?, ?, ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO daños (da_material, da_especifique, da_heridos, da_muertos, da_ambulancia, ser_id_da) VALUES (?, ?, ?, ?, ?, ?);',
         [material, especifique, heridos, muertos, ambulancia, id]
       )
     } catch (error) {
@@ -263,7 +263,7 @@ export class ServicesModel {
     const { legal, otro } = legales
     try {
       await connection.query(
-        'INSERT INTO legales (le_id, le_legales, le_otro, ser_id_le) VALUES (UNHEX(REPLACE(UUID(), "-", "")), ?, ?, UNHEX(REPLACE(?, "-", "")));',
+        'INSERT INTO legales (le_legales, le_otro, ser_id_le) VALUES (?, ?, ?);',
         [legal, otro, id]
       )
     } catch (error) {

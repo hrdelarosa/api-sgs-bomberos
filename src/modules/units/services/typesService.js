@@ -8,7 +8,6 @@ export class TypesService {
   create = async ({ nombre }) => {
     try {
       const typeExists = await this.typesModel.findTypeByName({ nombre })
-      console.log(typeExists)
 
       if (typeExists) customError('El tipo ya existe', 409)
 
@@ -37,7 +36,7 @@ export class TypesService {
       const typeExists = await this.typesModel.findTypeById({ id })
 
       if (typeExists === null) customError('El tipo no existe', 409)
-      if (typeExists.est_id_tu === 'inactivo')
+      if (typeExists.est_nombre === 'inactivo')
         customError('El tipo ya esta inactivo', 409)
 
       const countUnits = await this.typesModel.typeRelatedUnits({ id })

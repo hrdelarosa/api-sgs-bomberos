@@ -36,7 +36,7 @@ export class UnitsService {
       const unitExists = await this.unitsModel.findUnitByid({ id })
 
       if (unitExists === null) customError('La unidad no existe', 404)
-      if (unitExists.est_id_uni === 'inactivo')
+      if (unitExists.est_nombre === 'inactivo')
         customError('La unidad ya esta inactiva', 409)
 
       const countServices = await this.unitsModel.unitsRelatedService({ id })

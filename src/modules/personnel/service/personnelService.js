@@ -52,7 +52,7 @@ export class PersonnelService {
       })
 
       if (personnelExists === null) customError('El personal no existe', 409)
-      if (personnelExists.est_id_per === 'inactivo')
+      if (personnelExists.est_nombre === 'inactivo')
         customError('El personal ya esta inactivo', 409)
 
       const countServices = await this.personnelModel.personnelRelatedService({

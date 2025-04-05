@@ -42,8 +42,10 @@ export class UsersService {
       const userExists = await this.usersModel.findUserById({ id })
 
       if (userExists === null) customError('El usuario no existe', 404)
-      if (userExists.est_id_us === 'inactivo')
+      if (userExists.est_nombre === 'inactivo')
         customError('El usuario ya esta inactivo', 409)
+      if (userExists.rol_nombre === 'administrador')
+        customError('No se puede eliminar a un administrador', 409)
 
       const countService = await this.usersModel.userRelatedService({ id })
 
