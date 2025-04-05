@@ -1,11 +1,5 @@
-import crypto from 'node:crypto'
-
 export function createTokenVerification() {
-  return crypto
-    .randomBytes(16)
-    .toString('hex')
-    .match(/.{1,8}/g)
-    .join('-')
+  return Math.floor(100000 + Math.random() * 900000).toString()
 }
 
 export function tokenExpiryDate() {
