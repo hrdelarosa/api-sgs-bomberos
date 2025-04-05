@@ -1,25 +1,25 @@
 ### Registra un nuevo usuario 
-POST http://localhost:1234/api/auth/register
+POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-  "nombres": "Super Usuario",
-  "apellidos": "Admin",
-  "correo": "admin@gmail.com",
-  "contraseña": "admin123",
-  "confirmarContraseña": "admin123"
+  "nombres": "Hozmel Roberto",
+  "apellidos": "De la Rosa Rendón",
+  "correo": "hozmel.robert@gmail.com",
+  "contraseña": "123456",
+  "confirmarContraseña": "123456"
 }
 
 # {
-#   "nombres": "Hozmel Roberto",
-#   "apellidos": "De la Rosa Rendón",
-#   "correo": "hozmel.robert@gmail.com",
-#   "contraseña": "123456",
-#   "confirmarContraseña": "123456"
+#   "nombres": "Super Usuario",
+#   "apellidos": "Admin",
+#   "correo": "admin@gmail.com",
+#   "contraseña": "admin123",
+#   "confirmarContraseña": "admin123"
 # }
 
 ### Iniciar sesión 
-POST http://localhost:1234/api/auth/login
+POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
@@ -29,36 +29,36 @@ Content-Type: application/json
 
 # {
 #   "correo": "hozmel.robert@gmail.com",
-#   "contraseña": "chiga2008"
+#   "contraseña": "123456"
 # }
 
 ### Cerrar sesión
-POST http://localhost:1234/api/auth/logout
+POST http://localhost:3000/api/auth/logout
 
 ### Obtener el perfil del usuario
-GET http://localhost:1234/api/auth/profile/71c4456b-fb17-11ef-b9d1-a2cc1a1d4502
+GET http://localhost:3000/api/auth/profile/71c38445-6bc3-bb17-11c3-afc2b9c391c2
 
 ### Configuarar el perfil del usuario
-GET http://localhost:1234/api/auth/profile/settings/f3d94723-cd4d-11ef-8762-48b2a523c160
+GET http://localhost:3000/api/auth/profile/settings/f3d94723-cd4d-11ef-8762-48b2a523c160
 
 ### Verificar token
-GET http://localhost:1234/api/auth/verify-token
+GET http://localhost:3000/api/auth/verify-token
+Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxYzM4NDQ1LTZiYzMtYmIxNy0xMWMzLWFmYzJiOWMzOTFjMiIsInVzX2NvcnJlbyI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MjYzMzMzMywiZXhwIjoxNzQyNjc2NTMzfQ.rnNCBDxSNy2wXLGo8tKuIByVarK5IEYMI4PnCoDJD_w
 
 ### Refrescar token
-POST http://localhost:1234/api/auth/refresh-token
+POST http://localhost:3000/api/auth/refresh-token
 Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 
-
 ### Verificar correo
-POST http://localhost:1234/api/auth/verify-email
+POST http://localhost:3000/api/auth/email-verification
 Content-Type: application/json
 
 {
-  "token": "a3f9c4b2-1d6e78f0-5bc2e9a1-8d34f7e2"
+  "token": "757617"
 }
 
 ### Reenviar el código para la verificación del correo
-POST http://localhost:1234/api/auth/resend-verify-email
+POST http://localhost:3000/api/auth/resend-verify-email
 Content-Type: application/json
 
 {
@@ -66,7 +66,7 @@ Content-Type: application/json
 }
 
 ### Solicitar restablecimiento de contraseña
-POST http://localhost:1234/api/auth/request-password-reset
+POST http://localhost:3000/api/auth/request-password-reset
 Content-Type: application/json
 
 {
@@ -74,7 +74,7 @@ Content-Type: application/json
 }
 
 ### Restablecimiento de contraseña
-POST http://localhost:1234/api/auth/reset-password
+POST http://localhost:3000/api/auth/reset-password
 Content-Type: application/json
 
 {

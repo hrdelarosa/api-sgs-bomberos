@@ -1,5 +1,5 @@
 ### Crear un nuevo rango
-POST http://localhost:1234/api/ranks/create
+POST http://localhost:3000/api/ranks/create
 Content-Type: application/json
 
 {
@@ -7,15 +7,15 @@ Content-Type: application/json
 }
 
 ### Actualizar un rango
-PATCH http://localhost:1234/api/ranks/state/0f7ae935-fd79-11ef-a43b-4955ce09c2b0
+PATCH http://localhost:3000/api/ranks/state/5
 Content-Type: application/json
 
 {
-  "estado": "a52e3e14-faea-11ef-b9d1-a2cc1a1d4502"
+  "estado": 2
 }
 
 ### Eliminar un rango guardado
-DELETE http://localhost:1234/api/ranks/delete/0f7ae935-fd79-11ef-a43b-4955ce09c2b0
+DELETE http://localhost:3000/api/ranks/delete/5
 
 ### Recuperar todos los rangos guardados
-GET http://localhost:1234/api/ranks
+GET http://localhost:3000/api/ranks

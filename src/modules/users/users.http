@@ -1,24 +1,24 @@
 ### Actualizar estado del usuario
-PATCH http://localhost:1234/api/users/state/f3d94723-cd4d-11ef-8762-48b2a523c160
+PATCH http://localhost:3000/api/users/state/1
 Content-Type: application/json
 
 {
-  "estado": "aeaa26d7-cd46-11ef-8762-48b2a523c160"
+  "estado": 1
 }
 
 ### Actualizar rol del usurio 
-PATCH http://localhost:1234/api/users/role/f3d94723-cd4d-11ef-8762-48b2a523c160
+PATCH http://localhost:3000/api/users/role/1
 Content-Type: application/json
 
 {
-  "rol": "ac624e32-cd46-11ef-8762-48b2a523c160"
+  "rol": 1
 }
 
 ### Eliminar un usuario guardado
-DELETE http://localhost:1234/api/users/delete/938e60fb-c953-11ef-a95a-24842a45da79
+DELETE http://localhost:3000/api/users/delete/1
 
 ### Recuperar todos los usuarios guardados
-GET http://localhost:1234/api/users
+GET http://localhost:3000/api/users
 
 ### Recuperar un usuario guardado por el id
-GET http://localhost:1234/api/users/71c38445-6bc3-bb17-11c3-afc2b9c391c2
+GET http://localhost:3000/api/users/1

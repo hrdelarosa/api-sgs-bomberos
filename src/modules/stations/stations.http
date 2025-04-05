@@ -1,23 +1,23 @@
 ### Crear una nueva estación
-POST http://localhost:1234/api/stations/create
+POST http://localhost:3000/api/stations/create
 Content-Type: application/json
 
 {
-  "nombre": "Departamento De Bomberos Acapulco Farallon",
-  "ubicacion": "Cañada de los Amates S/n, Fraccionamiento Farallon del Obispo, 39690 Acapulco de Juárez, Gro."
+  "nombre": "Cuartel de Bomberos Acapulco - Cuartel Mercado Central",
+  "ubicacion": "39350, Progreso, 39350 Acapulco de Juárez, Gro."
 }
 
 ### Actualizar una estación
-PATCH http://localhost:1234/api/stations/state/12ced99b-ff01-11ef-8a77-1c8548d9687c
+PATCH http://localhost:3000/api/stations/state/6
 Content-Type: application/json
 
 {
-  "estado": "a52e31fe-faea-11ef-b9d1-a2cc1a1d4502"
+  "estado": 2
 }
 
 ### Eliminar una estación guardada
-DELETE http://localhost:1234/api/stations/delete/12ced99b-ff01-11ef-8a77-1c8548d9687c
+DELETE http://localhost:3000/api/stations/delete/6
 
 ### Recuperar todas las estaciones guardadas
-GET http://localhost:1234/api/stations
+GET http://localhost:3000/api/stations
 

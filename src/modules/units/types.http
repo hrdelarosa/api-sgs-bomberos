@@ -1,5 +1,5 @@
 ### Crear una nueva unidad
-POST http://localhost:1234/api/types/create
+POST http://localhost:3000/api/types/create
 Content-Type: application/json
 
 {
@@ -7,15 +7,15 @@ Content-Type: application/json
 }
 
 ### Actualizar una unidad
-PATCH http://localhost:1234/api/types/state/791cc3aa-6cc3-bd2c-11c3-afc2a43b4955
+PATCH http://localhost:3000/api/types/state/5
 Content-Type: application/json
 
 {
-  "estado": "c2a52e31-c3be-c3ba-c3aa-11c3afc2b9c3"
+  "estado": 2
 }
 
 ### Eliminar la unidad guardada
-DELETE http://localhost:1234/api/types/delete/791cc3aa-6cc3-bd2c-11c3-afc2a43b4955
+DELETE http://localhost:3000/api/types/delete/5
 
 ### Recuperar todas las types guardadas
-GET http://localhost:1234/api/types
+GET http://localhost:3000/api/types
