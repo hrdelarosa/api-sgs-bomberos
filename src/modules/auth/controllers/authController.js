@@ -69,9 +69,9 @@ export class AuthController {
   verifyToken = async (req, res) => {
     try {
       const { token } = req.cookies
-      const decoded = await this.authService.verifyToken({ token })
+      const { decoded, user } = await this.authService.verifyToken({ token })
 
-      res.status(200).json({ message: 'Token válido', decoded })
+      res.status(200).json({ message: 'Token válido', decoded, user })
     } catch (error) {
       console.error('Error en el controlador de verificación del token:', error)
       res.status(error.statusCode || 401).json({ message: error.message })
