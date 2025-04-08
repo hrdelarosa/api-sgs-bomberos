@@ -44,6 +44,28 @@ export class PersonnelController {
     }
   }
 
+  updatePersonnel = async (req, res) => {
+    try {
+      const { id } = req.params
+      const { estado, rango, guardia } = req.body
+      console.log('constroller', req.body)
+
+      await this.personnelService.updatePersonnel({
+        id,
+        estado,
+        rango,
+        guardia,
+      })
+
+      res.status(200).json({
+        message: 'El personal ha sido actualizado correctamente',
+      })
+    } catch (error) {
+      console.error('Error en el controlador de actualizar el personal:', error)
+      res.status(error.statusCode || 400).json({ message: error.message })
+    }
+  }
+
   deletePersonnel = async (req, res) => {
     try {
       const { id } = req.params

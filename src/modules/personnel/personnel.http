@@ -11,12 +11,15 @@ Content-Type: application/json
   "guardia": 1
 }
 
-### Actualizar el estado de un personal
-PATCH http://localhost:3000/api/personnel/state/45
+### Actualizar un personal
+PATCH http://localhost:3000/api/personnel/update/45
 Content-Type: application/json
 
 {
-  "estado": 2
+  "estado": 1,
+  "rango": 1,
+  "guardia": 1
+
 }
 
 ### Eliminar un personal guardado
@@ -30,19 +33,3 @@ GET http://localhost:3000/api/personnel/rank/1
 
 ### Recuperar a todo el personal vinculados a una guardia
 GET http://localhost:3000/api/personnel/guard/1
-
-### Actualizar un personal por rango
-PATCH http://localhost:3000/api/personnel/rank/45
-Content-Type: application/json
-
-{
-  "rango": 3
-}
-
-### Actualizar un personal por guardia
-PATCH http://localhost:3000/api/personnel/guard/45
-Content-Type: application/json
-
-{
-  "guardia": 2
-}

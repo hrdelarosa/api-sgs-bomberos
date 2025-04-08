@@ -28,14 +28,8 @@ export const personnelSchema = z.object({
   guardia: z.number({ required_error: 'La guardia es requerido' }),
 })
 
-export const updateStateSchema = z.object({
+export const updatePersonnelSchema = z.object({
   estado: z.number({ required_error: 'El estado es requerido' }),
-})
-
-export const updateRankSchema = personnelSchema.pick({
-  rango: true,
-})
-
-export const updateGuardSchema = personnelSchema.pick({
-  guardia: true,
+  rango: z.number({ required_error: 'El rago es requerido' }),
+  guardia: z.number({ required_error: 'La guardia es requerido' }),
 })

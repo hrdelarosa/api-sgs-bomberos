@@ -26,16 +26,29 @@ export class PersonnelService {
       throw error
     }
   }
-
-  changePersonnelStatus = async ({ id, estado }) => {
+  // NOTA: A la hora de actualizar un campo de cualquier elemento manejar si el valor es el mismo lanzar un error que no se puede actualizar
+  // al mismo valor, por ende debe de ser diferente al que ya tiene
+  updatePersonnel = async ({ id, estado, rango, guardia }) => {
     try {
       const personnelExists = await this.personnelModel.findPersonnelById({
         id,
       })
+      console.log(id, estado, rango, guardia, personnelExists)
 
       if (personnelExists === null) customError('El personal no existe', 409)
+      if (
+        personnelExists.est_id_per === estado &&
+        personnelExists.ran_id_per === rango &&
+        personnelExists.gu_id_per === guardia
+      )
+        customError('Estas actualizando el personal conlos mismos datos', 409)
 
-      await this.personnelModel.updateStatusById({ estado, id })
+      if (personnelExists.est_id_per !== estado)
+        await this.personnelModel.updateStatusById({ estado, id })
+      if (personnelExists.ran_id_per !== rango)
+        await this.personnelModel.updateRankById({ rango, id })
+      if (personnelExists.gu_id_per !== guardia)
+        await this.personnelModel.updateGuardById({ guardia, id })
     } catch (error) {
       console.error(
         'Error en el servicio de actualizar el estado del personal:',
@@ -111,42 +124,6 @@ export class PersonnelService {
     } catch (error) {
       console.error(
         'Error en el servicio de obtener el personal por guardia:',
-        error
-      )
-      throw error
-    }
-  }
-
-  changePersonnelRank = async ({ id, rango }) => {
-    try {
-      const personnelExists = await this.personnelModel.findPersonnelById({
-        id,
-      })
-
-      if (personnelExists === null) customError('El personal no existe', 409)
-
-      await this.personnelModel.updateRankById({ rango, id })
-    } catch (error) {
-      console.error(
-        'Error en el servicio de actualizar el rango del personal:',
-        error
-      )
-      throw error
-    }
-  }
-
-  changePersonnelGuard = async ({ id, guardia }) => {
-    try {
-      const personnelExists = await this.personnelModel.findPersonnelById({
-        id,
-      })
-
-      if (personnelExists === null) customError('El personal no existe', 409)
-
-      await this.personnelModel.updateGuardById({ guardia, id })
-    } catch (error) {
-      console.error(
-        'Error en el servicio de actualizar la guardia del personal:',
         error
       )
       throw error

@@ -42,7 +42,7 @@ export class PersonnelModel {
   static async findPersonnelById({ id }) {
     try {
       const [person] = await connection.query(
-        'SELECT per_nombres, est_id_per, estados.est_nombre FROM personal LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE per_id = ?;',
+        'SELECT ran_id_per, gu_id_per, est_id_per, estados.est_nombre FROM personal LEFT JOIN estados ON personal.est_id_per = estados.est_id WHERE per_id = ?;',
         [id]
       )
 
