@@ -1,5 +1,4 @@
 import { connection } from '../../../config/db.js'
-import { v4 as uuidv4 } from 'uuid'
 
 export class ServicesModel {
   static async create({
@@ -16,13 +15,10 @@ export class ServicesModel {
     otro,
     observaciones,
   }) {
-    const id = uuidv4()
-
     try {
-      await connection.query(
-        `INSERT INTO servicio (ser_id, us_id_ser, ser_creado, ser_nombre, ser_telefono, ser_salida, ser_llegada, ser_control, ser_base, ser_incidente, ser_ubicacion, ser_folio, ser_otro, ser_observaciones, estser_id_ser) VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT estser_id FROM estadosservicio WHERE estser_nombre = 'nuevo' LIMIT 1));`,
+      const [result] = await connection.query(
+        `INSERT INTO servicio (us_id_ser, ser_creado, ser_nombre, ser_telefono, ser_salida, ser_llegada, ser_control, ser_base, ser_incidente, ser_ubicacion, ser_folio, ser_otro, ser_observaciones, estser_id_ser) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT estser_id FROM estadosservicio WHERE estser_nombre = 'nuevo' LIMIT 1));`,
         [
-          id,
           usuario,
           nombre,
           telefono,
@@ -38,10 +34,22 @@ export class ServicesModel {
         ]
       )
 
-      return id
+      return result.insertId
     } catch (error) {
       console.error('Error al crear un nuevo servicio:', error)
       throw new Error('Error al crear un nuevo servicio')
+    }
+  }
+
+  static async updateStatusById({ id, estado }) {
+    try {
+      await connection.query(
+        'UPDATE servicio SET estser_id_ser = ? WHERE ser_id = ?;',
+        [estado, id]
+      )
+    } catch (error) {
+      console.error('Error en el servicio de actualizar el:', error)
+      throw error
     }
   }
 
@@ -72,12 +80,32 @@ export class ServicesModel {
     }
   }
 
-  static async getServices({ limit, offset }) {
+  static async getServices({ limit, offset, folio, incidente }) {
     try {
-      const [service] = await connection.query(
-        'SELECT ser_id, usuarios.us_nombres, ser_creado, ser_nombre, ser_telefono, ser_incidente, ser_ubicacion, ser_folio, ser_observaciones, estser_id_ser, estadosservicio.estser_nombre FROM servicio INNER JOIN usuarios ON servicio.us_id_ser = usuarios.us_id INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id ORDER BY ser_creado DESC LIMIT ? OFFSET ?;',
-        [limit, offset]
-      )
+      let query =
+        'SELECT ser_id, usuarios.us_nombres, ser_creado, ser_nombre, ser_telefono, ser_incidente, ser_ubicacion, ser_folio, ser_observaciones, estser_id_ser, estadosservicio.estser_nombre FROM servicio INNER JOIN usuarios ON servicio.us_id_ser = usuarios.us_id INNER JOIN estadosservicio ON servicio.estser_id_ser = estadosservicio.estser_id'
+      let params = []
+      let whereAdded = false
+
+      if (folio || incidente) {
+        query += ' WHERE'
+        if (folio) {
+          query += ' ser_folio LIKE ?'
+          params.push(`%${folio}%`)
+          whereAdded = true
+        }
+        if (incidente) {
+          if (whereAdded) query += ' AND'
+          query += ' ser_incidente = ?'
+          params.push(incidente)
+        }
+      }
+
+      query +=
+        ' ORDER BY FIELD(estadosservicio.estser_id, 1, 2, 3, 4), ser_creado DESC LIMIT ? OFFSET ?'
+      params.push(limit, offset)
+
+      const [service] = await connection.query(query, params)
 
       return service
     } catch (error) {
@@ -86,11 +114,27 @@ export class ServicesModel {
     }
   }
 
-  static async getTotalServices() {
+  static async getTotalServices({ folio, incidente }) {
     try {
-      const [count] = await connection.query(
-        'SELECT COUNT(*) AS count FROM servicio;'
-      )
+      let query = 'SELECT COUNT(*) AS count FROM servicio'
+      let params = []
+      let whereAdded = false
+
+      if (folio || incidente) {
+        query += ' WHERE'
+        if (folio) {
+          query += ' ser_folio LIKE ?'
+          params.push(`%${folio}%`)
+          whereAdded = true
+        }
+        if (incidente) {
+          if (whereAdded) query += ' AND'
+          query += ' ser_incidente = ?'
+          params.push(incidente)
+        }
+      }
+
+      const [count] = await connection.query(query, params)
 
       return count[0].count
     } catch (error) {

@@ -58,6 +58,25 @@ export class ServicesController {
     }
   }
 
+  changeServiceStatus = async (req, res) => {
+    try {
+      const { id } = req.params
+      const { estado } = req.body
+
+      await this.servicesService.changeServiceStatus({ id, estado })
+
+      res
+        .status(200)
+        .json({ message: 'Estado del servicio actualizado correctamente' })
+    } catch (error) {
+      console.error(
+        'Error en el controlador de cambiar el estado del servicio:',
+        error
+      )
+      res.status(error.statusCode || 400).json({ message: error.message })
+    }
+  }
+
   deleteService = async (req, res) => {
     try {
       const { id } = req.params
@@ -73,11 +92,13 @@ export class ServicesController {
 
   getServices = async (req, res) => {
     try {
-      let { page = 1 } = req.query
+      let { page = 1, folio, incidente } = req.query
 
       const { totalPages, totalServices, servicesPerPage, services } =
         await this.servicesService.getServices({
           page,
+          folio,
+          incidente,
         })
 
       res.status(200).json({

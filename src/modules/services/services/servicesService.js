@@ -78,12 +78,30 @@ export class ServicesService {
     }
   }
 
-  deleteService = async ({ id }) => {
+  changeServiceStatus = async ({ id, estado }) => {
     try {
       const serviceExists = await this.servicesModel.findServiceById({ id })
 
       if (serviceExists === null) customError('El servicio no existe', 404)
-      if (serviceExists.estser_id_ser !== 'archivado')
+
+      if (serviceExists.estser_nombre === 'archivado')
+        customError('El servicio ya esta archivado', 409)
+
+      await this.servicesModel.updateStatusById({ estado, id })
+    } catch (error) {
+      console.error('Error en el servicio de actualizar el servicio:', error)
+      throw error
+    }
+  }
+
+  deleteService = async ({ id }) => {
+    try {
+      const serviceExists = await this.servicesModel.findServiceById({ id })
+      console.log(serviceExists)
+
+      if (serviceExists === null) customError('El servicio no existe', 404)
+
+      if (serviceExists.estser_nombre !== 'archivado')
         customError(
           'El servicio solo puede ser eliminado cuando está archivado',
           422
@@ -96,20 +114,28 @@ export class ServicesService {
     }
   }
 
-  getServices = async ({ page }) => {
+  getServices = async ({ page, folio, incidente }) => {
     try {
+      if (page < 1)
+        customError('El número de página no puede ser menor a 1', 422)
+
       const limit = 20
       const offset = (page - 1) * limit
-      const totalServices = await this.servicesModel.getTotalServices()
+      const totalServices = await this.servicesModel.getTotalServices({
+        folio,
+        incidente,
+      })
       const totalPages = Math.ceil(totalServices / limit)
       const servicesPerPage = limit
 
-      if (page < 1 || page > totalPages)
-        customError(
-          `Páginas inválidas. Solo hay ${totalPages} páginas disponibles`
-        )
+      if (totalPages === 0) customError('Servicios no encontrados', 404)
 
-      const services = await this.servicesModel.getServices({ limit, offset })
+      const services = await this.servicesModel.getServices({
+        limit,
+        offset,
+        folio,
+        incidente,
+      })
 
       if (services.length === 0) customError('Servicios no encontrados', 404)
 
