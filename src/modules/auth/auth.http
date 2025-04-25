@@ -3,19 +3,19 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-  "nombres": "Hozmel Roberto",
-  "apellidos": "De la Rosa Rendón",
-  "correo": "hozmel.robert@gmail.com",
-  "contraseña": "123456",
-  "confirmarContraseña": "123456"
+  "nombres": "Super Usuario",
+  "apellidos": "Admin",
+  "correo": "admin@gmail.com",
+  "contraseña": "admin123",
+  "confirmarContraseña": "admin123"
 }
 
 # {
-#   "nombres": "Super Usuario",
-#   "apellidos": "Admin",
-#   "correo": "admin@gmail.com",
-#   "contraseña": "admin123",
-#   "confirmarContraseña": "admin123"
+#   "nombres": "Hozmel Roberto",
+#   "apellidos": "De la Rosa Rendón",
+#   "correo": "hozmel.robert@gmail.com",
+#   "contraseña": "123456",
+#   "confirmarContraseña": "123456"
 # }
 
 ### Iniciar sesión 
@@ -36,14 +36,14 @@ Content-Type: application/json
 POST http://localhost:3000/api/auth/logout
 
 ### Obtener el perfil del usuario
-GET http://localhost:3000/api/auth/profile/71c38445-6bc3-bb17-11c3-afc2b9c391c2
+GET http://localhost:3000/api/auth/profile/4
 
 ### Configuarar el perfil del usuario
 GET http://localhost:3000/api/auth/profile/settings/f3d94723-cd4d-11ef-8762-48b2a523c160
 
 ### Verificar token
 GET http://localhost:3000/api/auth/verify-token
-Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxYzM4NDQ1LTZiYzMtYmIxNy0xMWMzLWFmYzJiOWMzOTFjMiIsInVzX2NvcnJlbyI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MjYzMzMzMywiZXhwIjoxNzQyNjc2NTMzfQ.rnNCBDxSNy2wXLGo8tKuIByVarK5IEYMI4PnCoDJD_w
+# Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxYzM4NDQ1LTZiYzMtYmIxNy0xMWMzLWFmYzJiOWMzOTFjMiIsInVzX2NvcnJlbyI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTc0MjYzMzMzMywiZXhwIjoxNzQyNjc2NTMzfQ.rnNCBDxSNy2wXLGo8tKuIByVarK5IEYMI4PnCoDJD_w
 
 ### Refrescar token
 POST http://localhost:3000/api/auth/refresh-token
@@ -54,15 +54,15 @@ POST http://localhost:3000/api/auth/email-verification
 Content-Type: application/json
 
 {
-  "token": "757617"
+  "token": "112345"
 }
 
 ### Reenviar el código para la verificación del correo
-POST http://localhost:3000/api/auth/resend-verify-email
+POST http://localhost:3000/api/auth/resend-email-verification
 Content-Type: application/json
 
 {
-  "correo": "hozmel.robert@gmail.com"
+  "correo": ""
 }
 
 ### Solicitar restablecimiento de contraseña

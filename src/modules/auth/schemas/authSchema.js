@@ -4,7 +4,6 @@ export const registerSchema = z
   .object({
     nombres: z
       .string({ required_error: 'Los nombres/nombre es requerido' })
-      .min(3, 'Los nombres/nombre debe de contener al menos 3 caracteres')
       .max(100, 'Los nombres/nombre no puede exceder los 50 caracteres')
       .regex(
         /^[a-zA-ZÀ-ÿ\s]{3,100}$/,
@@ -12,11 +11,10 @@ export const registerSchema = z
       ),
     apellidos: z
       .string({ required_error: 'Los apellidos son requeridos' })
-      .min(4, 'Los apellidos debe de contener al menos 4 caracteres')
       .max(100, 'Los apellidos no puede exceder los 50 caracteres')
       .regex(
         /^[a-zA-ZÀ-ÿ\s]{3,100}$/,
-        'El nombre solo puede tener letras y espacios'
+        'Los apellidos solo puede tener letras y espacios'
       ),
     correo: z
       .string({ required_error: 'El correo es requerido' })
@@ -25,14 +23,9 @@ export const registerSchema = z
       .string({ required_error: 'La contraseña es requerida' })
       .min(6, 'La contraseña debe de tener al menos 6 caracteres')
       .max(30, 'La contraseña no puede exceder los 30 caracteres'),
-    confirmarContraseña: z
-      .string({ required_error: 'Es requerido confirmar la contraseña' })
-      .min(6, {
-        message: 'Confirmar contraseña debe de tener al menos 6 caracteres',
-      })
-      .max(30, {
-        message: 'Confirmar contraseña no puede exceder los 30 caracteres',
-      }),
+    confirmarContraseña: z.string({
+      required_error: 'Es requerido confirmar la contraseña',
+    }),
   })
   .refine((data) => data.contraseña === data.confirmarContraseña, {
     message: 'Las contraseñas no coinciden',
@@ -75,10 +68,9 @@ export const resetPasswordSchema = z
       .string({ required_error: 'La contraseña es requerida' })
       .min(6, 'La contraseña debe de tener al menos 6 caracteres')
       .max(30, 'La contraseña no puede exceder los 30 caracteres'),
-    confirmarContraseña: z
-      .string()
-      .min(6, { message: 'La contraseña debe de tener al menos 6 caracteres' })
-      .max(30, { message: 'La contraseña no puede exceder los 30 caracteres' }),
+    confirmarContraseña: z.string({
+      required_error: 'Es requerido confirmar la contraseña',
+    }),
   })
   .refine((data) => data.contraseña === data.confirmarContraseña, {
     message: 'Las contraseñas no coinciden',

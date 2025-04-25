@@ -54,11 +54,13 @@ export class AuthService {
       if (!isMatch) customError('Correo o contraseña incorrectos', 401)
 
       const token = await createAccessToken({
-        id: userExists.id,
+        us_id: userExists.us_id,
         us_correo: userExists.us_correo,
       })
 
-      return token
+      const user = await this.authModel.findUserById({ id: userExists.us_id })
+
+      return { token, user }
     } catch (error) {
       console.error('Error en el servicio de registro:', error)
       throw error
@@ -86,7 +88,7 @@ export class AuthService {
 
       if (!decoded) customError('Token inválido o expirado', 401)
 
-      const user = await this.authModel.findUserById({ id: decoded.id })
+      const user = await this.authModel.findUserById({ id: decoded.us_id })
 
       if (!user) customError('Usuario no encontrado', 404)
 
@@ -169,7 +171,8 @@ export class AuthService {
     try {
       const userExists = await this.authModel.findUserByResetToken({ token })
 
-      if (!userExists) customError('Usuario no encontrado', 404)
+      if (!userExists) customError('Código expirado o inválido', 404)
+      // if (!userExists) customError('Usuario no encontrado', 404)
 
       await this.authModel.updatePassword({
         correo: userExists.us_correo,

@@ -29,14 +29,17 @@ export class AuthController {
   login = async (req, res) => {
     try {
       const { correo, contraseña } = req.body
-      const token = await this.authService.login({ correo, contraseña })
+      const { token, user } = await this.authService.login({
+        correo,
+        contraseña,
+      })
 
       res.cookie('token', token, {
         httpOnly: true,
         secure: true,
         sameSite: 'Strict',
       })
-      res.status(200).json({ message: 'Inicio de sesión exitoso' })
+      res.status(200).json({ message: 'Inicio de sesión exitoso', user, token })
     } catch (error) {
       console.error('Error en el controlador de inicio de sesión:', error)
       res.status(error.statusCode || 400).json({ message: error.message })
@@ -71,7 +74,7 @@ export class AuthController {
       const { token } = req.cookies
       const { decoded, user } = await this.authService.verifyToken({ token })
 
-      res.status(200).json({ message: 'Token válido', decoded, user })
+      res.status(200).json({ message: 'Token válido', decoded, user, token })
     } catch (error) {
       console.error('Error en el controlador de verificación del token:', error)
       res.status(error.statusCode || 401).json({ message: error.message })
