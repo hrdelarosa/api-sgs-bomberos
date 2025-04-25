@@ -26,14 +26,12 @@ export class PersonnelService {
       throw error
     }
   }
-  // NOTA: A la hora de actualizar un campo de cualquier elemento manejar si el valor es el mismo lanzar un error que no se puede actualizar
-  // al mismo valor, por ende debe de ser diferente al que ya tiene
+
   updatePersonnel = async ({ id, estado, rango, guardia }) => {
     try {
       const personnelExists = await this.personnelModel.findPersonnelById({
         id,
       })
-      console.log(id, estado, rango, guardia, personnelExists)
 
       if (personnelExists === null) customError('El personal no existe', 409)
       if (
@@ -41,7 +39,7 @@ export class PersonnelService {
         personnelExists.ran_id_per === rango &&
         personnelExists.gu_id_per === guardia
       )
-        customError('Estas actualizando el personal conlos mismos datos', 409)
+        customError('Estas actualizando el personal con los mismos datos', 409)
 
       if (personnelExists.est_id_per !== estado)
         await this.personnelModel.updateStatusById({ estado, id })

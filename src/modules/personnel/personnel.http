@@ -3,13 +3,22 @@ POST http://localhost:3000/api/personnel/create
 Content-Type: application/json
 
 {
-  "nombre": "Roberto",
-  "apellidos": "De la Rosa",
-  "np": "191102",
+  "nombre": "",
+  "apellidos": "",
+  "np": "",
   "rango": 1,
-  "base": "supernumerario",
+  "base": "",
   "guardia": 1
 }
+
+# {
+#   "nombre": "Roberto",
+#   "apellidos": "De la Rosa",
+#   "np": "191102",
+#   "rango": 1,
+#   "base": "supernumerario",
+#   "guardia": 1
+# }
 
 ### Actualizar un personal
 PATCH http://localhost:3000/api/personnel/update/45

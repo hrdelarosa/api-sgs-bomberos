@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const personnelSchema = z.object({
   nombre: z
     .string({ required_error: 'Los nombres/nombre es requerido' })
-    .min(3, 'Los nombres/nombre debe de contener al menos 3 caracteres')
+    // .min(3, 'Los nombres/nombre debe de contener al menos 3 caracteres')
     .max(50, 'Los nombres/nombre no puede exceder los 50 caracteres')
     .regex(
       /^[a-zA-ZÀ-ÿ\s]{3,100}$/,
@@ -11,16 +11,17 @@ export const personnelSchema = z.object({
     ),
   apellidos: z
     .string({ required_error: 'Los apellidos son requeridos' })
-    .min(4, 'Los apellidos debe de contener al menos 4 caracteres')
+    // .min(4, 'Los apellidos debe de contener al menos 4 caracteres')
     .max(100, 'Los apellidos no puede exceder los 50 caracteres')
     .regex(
       /^[a-zA-ZÀ-ÿ\s]{3,100}$/,
-      'El nombre solo puede tener letras y espacios'
+      'Los apellidos solo puede tener letras y espacios'
     ),
   np: z
-    .string({ required_error: 'El numero del personal es requerida' })
-    .min(3, 'El numero del personal debe de ser mayor a 3')
-    .max(8, 'El numero del personal debe de ser menor a 8'),
+    .string({ required_error: 'El numero del personal es requerido' })
+    // .min(3, 'El numero del personal debe de ser mayor a 3')
+    .max(8, 'El numero del personal debe de ser menor a 8')
+    .regex(/^\d+$/, 'El NP solo puede contenter numeros'),
   rango: z.number({ required_error: 'El rago es requerido' }),
   base: z.enum(['supernumerario', 'sindicalizado'], {
     required_error: 'La base es requerida',
