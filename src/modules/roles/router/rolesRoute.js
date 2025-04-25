@@ -9,7 +9,7 @@ export const createRolesRouter = ({ rolesModel }) => {
   const rolesController = new RolesController({ rolesModel })
 
   rolesRouter.post(
-    '/crear',
+    '/create',
     validateSchema(rolesSchema),
     rolesController.create
   )

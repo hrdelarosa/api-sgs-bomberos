@@ -52,12 +52,12 @@ export class RolesModel {
 
   static async roleRelatedUsers({ id }) {
     try {
-      const countUnits = await connection.query(
+      const [countUsers] = await connection.query(
         'SELECT COUNT(*) AS count FROM usuarios WHERE rol_id_us = ?;',
         [id]
       )
 
-      return countUnits[0].count
+      return countUsers[0].count
     } catch (error) {
       console.error(
         'Error al obtener la cantidad de servicios relacionados con la unidad:',

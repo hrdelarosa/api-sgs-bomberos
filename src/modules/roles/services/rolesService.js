@@ -20,6 +20,7 @@ export class RolesService {
 
   changeRoleStatus = async ({ id, estado }) => {
     try {
+      // NOTA: Crear logica para verificar si el estado al que se quiere cambiar es el mismo, y si es asi lanzar Error "No se puede cambiar el estado a uno igual"
       const roleExists = await this.rolesModel.findRoleById({ id })
 
       if (roleExists === null) customError('El rol no existe', 404)
@@ -39,7 +40,10 @@ export class RolesService {
       if (roleExists.est_nombre === 'inactivo')
         customError('El rol ya esta inactivo', 409)
 
+      console.log(id)
+      console.log(roleExists)
       const countUsers = await this.rolesModel.roleRelatedUsers({ id })
+      console.log(countUsers)
 
       if (countUsers > 0)
         customError(

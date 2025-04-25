@@ -1,5 +1,5 @@
 ### Crear un nuevo rol 
-POST http://localhost:3000/api/roles/crear
+POST http://localhost:3000/api/roles/create
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ### Eliminar el rol guardado
-DELETE http://localhost:3000/api/roles/delete/5
+DELETE http://localhost:3000/api/roles/delete/1
 
 ### Recuperar todos los roles guardados
 GET http://localhost:3000/api/roles
