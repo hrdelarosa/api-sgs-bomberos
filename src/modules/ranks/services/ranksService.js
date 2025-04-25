@@ -31,6 +31,7 @@ export class RanksService {
     }
   }
 
+  // NOTA: Agregar relacion de rango con el personal, para no permitir eliminar un rango que tenga personal relacionado
   deleteRank = async ({ id }) => {
     try {
       const rankExists = await this.ranksModel.findRankById({ id })
@@ -38,6 +39,14 @@ export class RanksService {
       if (rankExists === null) customError('El rango no existe', 404)
       if (rankExists.est_nombre === 'inactivo')
         customError('El rango ya esta inactivo', 409)
+
+      const countPersonnel = await this.ranksModel.ranksRelatedPersonnel({ id })
+
+      if (countPersonnel > 0)
+        customError(
+          'No se puede eliminar el rango porque tiene personal relacionado',
+          409
+        )
 
       await this.ranksModel.delete({ id })
     } catch (error) {

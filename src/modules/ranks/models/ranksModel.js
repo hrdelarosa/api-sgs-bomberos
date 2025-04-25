@@ -62,6 +62,25 @@ export class RanksModel {
     }
   }
 
+  static async ranksRelatedPersonnel({ id }) {
+    try {
+      const [countPersonnel] = await connection.query(
+        'SELECT COUNT(*) as count FROM personal WHERE ran_id_per = ?;',
+        [id]
+      )
+
+      return countPersonnel[0].count
+    } catch (error) {
+      console.error(
+        'Error al obtener el personal relacionados con la guardia:',
+        error
+      )
+      throw new Error(
+        'Error al obtener el personal relacionados con la guardia'
+      )
+    }
+  }
+
   static async getRanks() {
     try {
       const [ranks] = await connection.query(
