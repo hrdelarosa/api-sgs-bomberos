@@ -54,7 +54,7 @@ export const createApp = ({
   )
   app.use('/api/stations', createStationsRouter({ stationsModel }))
 
-  const PORT = process.env.PORT ?? 1234
+  const PORT = process.env.PORT || 3000
 
   app.listen(PORT, () => {
     console.log(`server listening on port http://localhost:${PORT}`)
