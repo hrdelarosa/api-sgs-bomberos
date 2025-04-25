@@ -15,7 +15,7 @@ export const createGuardsRouter = ({ guardsModel }) => {
   )
   guardsRouter.delete('/delete/:id', guardsController.deleteGuard)
   guardsRouter.get('/', guardsController.getGuards)
-  guardsRouter.get('/:id', guardsController.getGuardsPerStations)
+  guardsRouter.get('/station/:id', guardsController.getGuardsPerStations)
 
   return guardsRouter
 }

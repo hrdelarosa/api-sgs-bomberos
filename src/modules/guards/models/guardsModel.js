@@ -85,7 +85,7 @@ export class GuardsModel {
   static async getGuardsPerStations({ id }) {
     try {
       const [guards] = await connection.query(
-        'SELECT LOWER(CONCAT(LEFT(HEX(gu_id), 8), "-", MID(HEX(gu_id), 9, 4), "-", MID(HEX(gu_id), 13, 4), "-", MID(HEX(gu_id), 17, 4), "-", RIGHT(HEX(gu_id), 12))) AS id, gu_nombre, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id WHERE et_id_gu = ?;',
+        'SELECT gu_id, gu_nombre, et_id_gu, estaciones.et_nombre FROM guardia INNER JOIN estaciones ON guardia.et_id_gu = estaciones.et_id WHERE et_id_gu = ?;',
         [id]
       )
 

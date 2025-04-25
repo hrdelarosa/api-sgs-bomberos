@@ -5,6 +5,7 @@ export class GuardsService {
     this.guardsModel = guardsModel
   }
 
+  //NOTA: Posible modaificación para que pueda haber mas de guardia con el mismo nombre
   create = async ({ nombre, estacion }) => {
     try {
       const guardExist = await this.guardsModel.findGuardByName({ nombre })
@@ -30,7 +31,8 @@ export class GuardsService {
 
       if (countPersonnel > 0)
         customError(
-          'No se puede eliminar la guardia porque tiene personal relacionado'
+          'No se puede eliminar la guardia porque tiene personal relacionado',
+          409
         )
 
       await this.guardsModel.delete({ id })
