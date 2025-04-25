@@ -3,7 +3,7 @@ import { connection } from '../config/db.js'
 
 async function updateStatesServices() {
   try {
-    await connection.query('CALL actualizar_estados_servicio()')
+    await connection.query('CALL actualizar_estados_servicio();')
   } catch (error) {
     console.error(
       'Error al actualizar los estados de los servicios:',
