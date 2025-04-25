@@ -5,40 +5,18 @@ export class UsersController {
     this.usersService = new UsersService({ usersModel })
   }
 
-  changeUserState = async (req, res) => {
+  updateUser = async (req, res) => {
     try {
       const { id } = req.params
-      const { estado } = req.body
+      const { estado, rol } = req.body
 
-      await this.usersService.changeUserState({ id, estado })
+      await this.usersService.updateUser({ id, estado, rol })
 
       res.status(200).json({
-        message: 'Estado del usuario ha sido actualizado correctamente',
+        message: 'Usuario ha sido actualizado correctamente',
       })
     } catch (error) {
-      console.error(
-        'Error en el controlador de actualizar el estado del usuario:',
-        error
-      )
-      res.status(error.statusCode || 400).json({ message: error.message })
-    }
-  }
-
-  changeUserRole = async (req, res) => {
-    try {
-      const { id } = req.params
-      const { rol } = req.body
-
-      await this.usersService.changeUserRole({ id, rol })
-
-      res
-        .status(200)
-        .json({ message: 'Rol del usuario ha sido actualizado correctamente' })
-    } catch (error) {
-      console.error(
-        'Error en el controlador de actualizar el rol del usuario:',
-        error
-      )
+      console.error('Error en el controlador de actualizar el usuario:', error)
       res.status(error.statusCode || 400).json({ message: error.message })
     }
   }

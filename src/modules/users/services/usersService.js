@@ -5,34 +5,20 @@ export class UsersService {
     this.usersModel = usersModel
   }
 
-  changeUserState = async ({ id, estado }) => {
+  updateUser = async ({ id, estado, rol }) => {
     try {
       const userExists = await this.usersModel.findUserById({ id })
 
       if (userExists === null) customError('El usuario no existe', 404)
+      if (userExists.est_id_us === estado && userExists.rol_id_us === rol)
+        customError('Estas actualizando el usuario con los mismos datos', 409)
 
-      await this.usersModel.updateStateById({ estado, id })
+      if (userExists.est_nombre !== estado)
+        await this.usersModel.updateStateById({ estado, id })
+      if (userExists.rol_nombre !== rol)
+        await this.usersModel.updateRoleById({ rol, id })
     } catch (error) {
-      console.error(
-        'Error en el servicio de actualizar el estado del usuario:',
-        error
-      )
-      throw error
-    }
-  }
-
-  changeUserRole = async ({ id, rol }) => {
-    try {
-      const userExists = await this.usersModel.findUserById({ id })
-
-      if (userExists === null) customError('El usuario no existe', 404)
-
-      await this.usersModel.updateRoleById({ rol, id })
-    } catch (error) {
-      console.error(
-        'Error en el servicio de actualizar el rol del usuario:',
-        error
-      )
+      console.error('Error en el servicio de actualizar el usuario:', error)
       throw error
     }
   }

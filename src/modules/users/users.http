@@ -1,17 +1,11 @@
-### Actualizar estado del usuario
-PATCH http://localhost:3000/api/users/state/1
+### Actualizar un usuario
+PATCH http://localhost:3000/api/users/update/4
 Content-Type: application/json
 
 {
-  "estado": 1
-}
+  "estado": 1,
+  "rol": 5
 
-### Actualizar rol del usurio 
-PATCH http://localhost:3000/api/users/role/1
-Content-Type: application/json
-
-{
-  "rol": 1
 }
 
 ### Eliminar un usuario guardado
