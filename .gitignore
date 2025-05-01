@@ -28,5 +28,5 @@ dist-ssr
 *.env
 .env.local
 
-## Ignore folder
-ignoreFile/
+## Ignore folder with sensitive data
+certificates

@@ -1,8 +1,12 @@
 import './lib/loadEnv.js'
 import './utils/cronJobs.js'
 import express, { json } from 'express'
-import cookieParser from 'cookie-parser'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fs from 'fs'
 import { corsMiddleware } from './middleware/cors.js'
+import cookieParser from 'cookie-parser'
+import https from 'https'
 
 import { createAuthRouter } from './modules/auth/routes/authRoute.js'
 import { createRolesRouter } from './modules/roles/router/rolesRoute.js'
@@ -32,6 +36,15 @@ export const createApp = ({
   stationsModel,
 }) => {
   const app = express()
+  const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+  // Configuración SSL
+  const options = {
+    key: fs.readFileSync(path.join(__dirname, '../certificates/private.key')),
+    cert: fs.readFileSync(
+      path.join(__dirname, '../certificates/certificate.pem')
+    ),
+  }
 
   app.use(json())
   app.use(corsMiddleware())
@@ -56,7 +69,10 @@ export const createApp = ({
 
   const PORT = process.env.PORT || 3000
 
-  app.listen(PORT, () => {
-    console.log(`server listening on port http://localhost:${PORT}`)
+  // Crear servidor HTTPS
+  const server = https.createServer(options, app)
+
+  server.listen(PORT, () => {
+    console.log(`Servidor HTTPS escuchando en puerto https://localhost:${PORT}`)
   })
 }
