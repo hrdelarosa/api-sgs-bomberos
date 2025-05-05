@@ -1,14 +1,21 @@
 import { Router } from 'express'
 import { ServicesController } from '../controllers/servicesController.js'
 import { validateSchema } from '../../../middleware/validateSchema.js'
-import { updateServiceSchema } from '../schemas/servicesSchema.js'
+import {
+  servicesSchema,
+  updateServiceSchema,
+} from '../schemas/servicesSchema.js'
 
 export const createServicesRouter = ({ servicesModel }) => {
   const servicesRouter = Router()
 
   const servicesController = new ServicesController({ servicesModel })
 
-  servicesRouter.post('/create', servicesController.create)
+  servicesRouter.post(
+    '/create',
+    validateSchema(servicesSchema),
+    servicesController.create
+  )
   servicesRouter.patch(
     '/state/:id',
     validateSchema(updateServiceSchema),

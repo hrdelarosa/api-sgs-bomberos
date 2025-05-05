@@ -97,7 +97,6 @@ export class ServicesService {
   deleteService = async ({ id }) => {
     try {
       const serviceExists = await this.servicesModel.findServiceById({ id })
-      console.log(serviceExists)
 
       if (serviceExists === null) customError('El servicio no existe', 404)
 
