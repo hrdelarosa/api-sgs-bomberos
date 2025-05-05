@@ -1,0 +1,20 @@
+### Recuperar el porcentaje de los servicios por incidente 
+GET http://localhost:3000/api/dashboard/services-incident-porcentaje 
+
+### Recuperar el total de los sevicios y el total servicios por incidente 
+GET http://localhost:3000/api/dashboard/summary-per-incident 
+
+### Recuperar el total de los sevicios del mes actual y anterior con el porcentaje de diferencia 
+GET http://localhost:3000/api/dashboard/services-monthly
+
+### Recuperar el total de los sevicios por incidente del mes actual y anterior con el porcentaje de diferencia 
+GET http://localhost:3000/api/dashboard/services-per-incident-monthly
+
+### Recuperar el porcentaje de los tipos de unidad 
+GET http://localhost:3000/api/dashboard/unit-types-porcentaje
+
+### Recuperar el estado de las unidad 
+GET http://localhost:3000/api/dashboard/unit-status
+
+### Recuperar el tiempo de respuesta promedio de los sevicios
+GET http://localhost:3000/api/dashboard/response-services
