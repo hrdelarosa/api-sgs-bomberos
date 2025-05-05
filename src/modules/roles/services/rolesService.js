@@ -40,10 +40,7 @@ export class RolesService {
       if (roleExists.est_nombre === 'inactivo')
         customError('El rol ya esta inactivo', 409)
 
-      console.log(id)
-      console.log(roleExists)
       const countUsers = await this.rolesModel.roleRelatedUsers({ id })
-      console.log(countUsers)
 
       if (countUsers > 0)
         customError(
