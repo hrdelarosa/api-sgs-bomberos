@@ -11,6 +11,7 @@ import { UsersModel } from './modules/users/models/usersModel.js'
 import { ServicesModel } from './modules/services/models/servicesModel.js'
 import { StatesServicesModel } from './modules/services/models/statesServicesModel.js'
 import { StationsModel } from './modules/stations/models/stationsModel.js'
+import { DashboardModel } from './modules/dashboard/models/dashboardModel.js'
 
 createApp({
   authModel: AuthModel,
@@ -25,4 +26,5 @@ createApp({
   servicesModel: ServicesModel,
   statesServicesModel: StatesServicesModel,
   stationsModel: StationsModel,
+  dashboardModel: DashboardModel,
 })

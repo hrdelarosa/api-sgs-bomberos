@@ -1,12 +1,8 @@
 import './lib/loadEnv.js'
 import './utils/cronJobs.js'
 import express, { json } from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import fs from 'fs'
 import { corsMiddleware } from './middleware/cors.js'
 import cookieParser from 'cookie-parser'
-import https from 'https'
 
 import { createAuthRouter } from './modules/auth/routes/authRoute.js'
 import { createRolesRouter } from './modules/roles/router/rolesRoute.js'
@@ -20,6 +16,7 @@ import { createUsersRouter } from './modules/users/router/usersRoute.js'
 import { createServicesRouter } from './modules/services/router/servicesRoute.js'
 import { createStatesServicesRouter } from './modules/services/router/statesServicesRoute.js'
 import { createStationsRouter } from './modules/stations/router/stationsRoute.js'
+import { createDashboardRouter } from './modules/dashboard/router/dashboardRoute.js'
 
 export const createApp = ({
   authModel,
@@ -34,17 +31,9 @@ export const createApp = ({
   servicesModel,
   statesServicesModel,
   stationsModel,
+  dashboardModel,
 }) => {
   const app = express()
-  const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-  // Configuración SSL
-  const options = {
-    key: fs.readFileSync(path.join(__dirname, '../certificates/private.key')),
-    cert: fs.readFileSync(
-      path.join(__dirname, '../certificates/certificate.pem')
-    ),
-  }
 
   app.use(json())
   app.use(corsMiddleware())
@@ -66,13 +55,11 @@ export const createApp = ({
     createStatesServicesRouter({ statesServicesModel })
   )
   app.use('/api/stations', createStationsRouter({ stationsModel }))
+  app.use('/api/dashboard', createDashboardRouter({ dashboardModel }))
 
   const PORT = process.env.PORT || 3000
 
-  // Crear servidor HTTPS
-  const server = https.createServer(options, app)
-
-  server.listen(PORT, () => {
-    console.log(`Servidor HTTPS escuchando en puerto https://localhost:${PORT}`)
+  app.listen(PORT, () => {
+    console.log(`server listening on port http://localhost:${PORT}`)
   })
 }
