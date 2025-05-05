@@ -48,7 +48,6 @@ export class PersonnelController {
     try {
       const { id } = req.params
       const { estado, rango, guardia } = req.body
-      console.log('constroller', req.body)
 
       await this.personnelService.updatePersonnel({
         id,
