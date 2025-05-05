@@ -4,6 +4,7 @@ const ACCEPTED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
   'https://sistemasdemo.gobacapulco.net/incidenciasbomberos/',
+  'http://187.217.93.89',
 ]
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => {
