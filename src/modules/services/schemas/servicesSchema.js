@@ -9,10 +9,10 @@ export const servicesSchema = z.object({
     'otro',
   ]),
   personal: z
-    .array(z.string())
+    .array(z.number())
     .min(1, 'Debe asignar al menos una persona al servicio'),
   unidades: z
-    .array(z.string())
+    .array(z.number())
     .min(1, 'Debe asignar al menos una unidad al servicio'),
 })
 
