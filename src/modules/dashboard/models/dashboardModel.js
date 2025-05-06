@@ -38,7 +38,7 @@ export class DashboardModel {
         'SELECT ser_incidente as incidente, COUNT(*) as cantidad FROM servicio GROUP BY ser_incidente ORDER BY cantidad DESC'
       )
 
-      return incident[0] || null
+      return incident
     } catch (error) {
       console.error(
         'Error al obtener el total de los servicios por el incidente:',

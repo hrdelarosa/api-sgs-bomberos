@@ -11,7 +11,7 @@ export class DashboardController {
 
       res.status(200).json({
         message: 'Porcentaje de incidentes obtenidos correctamente',
-        percentage,
+        incidentesPorcentajes: percentage,
       })
     } catch (error) {
       console.error(
@@ -82,7 +82,7 @@ export class DashboardController {
 
       res.status(200).json({
         message: 'Porcentaje de los tipos de unidad obtenidos correctamente',
-        percentage,
+        typesPorcentaje: percentage,
       })
     } catch (error) {
       console.error(
@@ -112,12 +112,12 @@ export class DashboardController {
 
   responseTimes = async (req, res) => {
     try {
-      const times = await this.dashboardModel.responseTimes()
+      const timesServices = await this.dashboardModel.responseTimes()
 
       res.status(200).json({
         message:
           'Tiempo respuesta promedio de los sevicios obtenidos correctamente',
-        times,
+        timesServices,
       })
     } catch (error) {
       console.error(
